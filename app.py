@@ -57,30 +57,39 @@ sidebar = html.Aside(
     style=SIDEBAR_STYLE,
 )
 
-top_nav = html.Div(
+header = html.Div(
     [
-        # collapse (RESPONDEND FILTERS)
-        html.Div(
-            [
-                dbc.Button(
-                    "Filter respondents",
-                    id="collapse-button",
-                    className="mb-3",
-                    color="primary",
+        dbc.Row(
+            [   # Paginatitel
+                dbc.Col(html.H2("Home"),
                 ),
-                dbc.Collapse(
-                    dbc.Card(dbc.CardBody("This content is hidden in the collapse")),
-                    id="collapse",
-                ),
-            ],
-            style = {'padding-bottom' : '30px'}
+                
+                # Filter respondents (collapse)
+                dbc.Col(
+                    html.Div(
+                        [
+                            dbc.Button(
+                                "Filter respondents",
+                                id="collapse-button",
+                                className="mb-3",
+                                color="primary",
+                            ),
+                            dbc.Collapse(
+                                dbc.Card(dbc.CardBody("This content is hidden in the collapse")),
+                                id="collapse"
+                            ),
+                        ],
+                        className='mb-4 d-flex flex-column align-items-end'
+                    ),
+                )
+            ]
         )
     ]
 )
 
 content = html.Main(
     [
-        top_nav,
+        header,
         html.Div(id="page-content")
     ], 
     style=CONTENT_STYLE
@@ -97,20 +106,20 @@ app.layout = html.Div(
     ]
 )
 
-
-@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+# Callbacks ----------------------------------------------------------------------------------------------------------------------
+@app.callback(Output("page-content", "children"), 
+            [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
-        return html.Div(
+        return html.Div(        
             [
-                html.H2("This is a title"),
                 html.P("This is the content of the home page!"),
             ]
         )
     elif pathname == "/page-1":
-        return html.H2("This is the content of page 1. Yay!")
+        return html.P("This is the content of page 1. Yay!")
     elif pathname == "/page-2":
-        return html.H2("Oh cool, this is page 2!")
+        return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
@@ -120,7 +129,6 @@ def render_page_content(pathname):
         ]
     )
 
-# Callbacks ------------------------------------------------------------------------------------------------------
 @app.callback(
     Output("collapse", "is_open"),
     [Input("collapse-button", "n_clicks")],
