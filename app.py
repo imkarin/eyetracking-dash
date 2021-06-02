@@ -11,7 +11,8 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
-# df = pd.read_csv('./Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+print(df)
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
