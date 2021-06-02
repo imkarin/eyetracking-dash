@@ -85,8 +85,21 @@ header = html.Div(
                                 color="primary",
                             ),
                             dbc.Collapse(
-                                dbc.Card(dbc.CardBody("This content is hidden in the collapse")),
-                                id="collapse"
+                                dbc.Card([
+                                    html.Label(
+                                        [
+                                            "Gender",
+                                            dcc.Dropdown(
+                                                id='dropdown',
+                                                options=[
+                                                    {'label': 'aaaa', 'value': 'a'},
+                                                    {'label': 'bbbb', 'value': 'b'}
+                                                ]
+                                            )
+                                        ]
+                                    )
+                                ]),
+                                id="collapse",
                             ),
                         ],
                         className='mb-4 d-flex flex-column align-items-end'
@@ -97,36 +110,45 @@ header = html.Div(
     ]
 )
 
-content = html.Main(
+# Plots section
+content = html.Section(id='page-content')
+
+# Main (header + content wrapper)
+main = html.Main(
     [
         header,
-        html.Div(id="page-content")
+        content,
     ], 
-    style=CONTENT_STYLE
+    style=CONTENT_STYLE,
+    id='main'
 )
 
+# Full layout
 app.layout = html.Div(
     [
         # head
         dcc.Location(id="url"), 
+        dcc.Store(id='data-storage', storage_type='session'),     # data/filters stored in Store
 
         # body
         sidebar, 
-        content
+        main
     ]
 )
 
 # Callbacks ----------------------------------------------------------------------------------------------------------------------
-# Page content based on sidebar links (nav)
+# Page content based on sidebar nav     & Respondent filter
 @app.callback([Output('page-content', 'children'),
                Output('page-title', 'children'),
                Output('nav-dropdown', 'className')], 
-               [Input("url", "pathname")])
-def render_page_content(pathname):
+               [Input("url", "pathname"),
+                Input('data-storage', 'data')])        # Store
+def render_page_content(pathname, data):
     if pathname == "/":
         return html.Div(        
             [
                 html.P("This is the content of the home page!"),
+                html.P(data['test'])
             ]
         ), 'Home', ''
     elif pathname == "/complete-route":
@@ -153,6 +175,16 @@ def toggle_collapse(n, is_open):
         return not is_open
     return is_open
 
+# Filter update callback (refreshes the main (content))
+@app.callback(
+    Output('data-storage', 'data'),
+    [Input('dropdown', 'value'),
+     State('data-storage', 'data')]
+)
+def update_filters(ddval, data):
+    data = data or {'test': 'x'}
+    data['test'] = ddval
+    return data
 
 if __name__ == "__main__":
     app.run_server(debug=True)
