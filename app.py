@@ -1,16 +1,8 @@
 """
-This app creates a simple sidebar layout using inline style arguments and the
-dbc.Nav component.
-
-dcc.Location is used to track the current location, and a callback uses the
-current location to render the appropriate page content. The active prop of
-each NavLink is set automatically according to the current pathname. To use
-this feature you must install dash-bootstrap-components >= 0.11.0.
-
 For more details on building multi-page Dash applications, check out the Dash
 documentation: https://dash.plot.ly/urls
-mand
 """
+from logging import disable
 import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -48,8 +40,21 @@ sidebar = html.Aside(
         dbc.Nav(
             [
                 dbc.NavLink("Home", href="/", active="exact"),
-                dbc.NavLink("Page 1", href="/page-1", active="exact"),
-                dbc.NavLink("Page 2", href="/page-2", active="exact"),
+                dbc.NavLink("Data full route", href="/complete-route", active="exact"),
+                dbc.DropdownMenu(
+                    id='nav-dropdown',
+                    label="Data per viewpoint ",
+                    in_navbar=True,
+                    nav=True,
+                    direction='right',
+                    children=[
+                        dbc.DropdownMenuItem(
+                            dbc.NavLink("Viewpoint 1", href="per-viewpoint-1", active="exact")), 
+                        dbc.DropdownMenuItem(
+                            dbc.NavLink("Viewpoint 2", href="per-viewpoint-2", active="exact")
+                        )],
+                    ),
+                dbc.NavLink("Sources", href="/sources", active="exact", disabled=True)
             ],
             vertical=True,
             pills=True,
@@ -62,7 +67,11 @@ header = html.Div(
     [
         dbc.Row(
             [   # Paginatitel
-                dbc.Col(html.H2("Home"),
+                dbc.Col(
+                    html.H2(
+                        "Home",
+                        id="page-title"
+                    ),
                 ),
                 
                 # Filter respondents (collapse)
@@ -108,28 +117,32 @@ app.layout = html.Div(
 )
 
 # Callbacks ----------------------------------------------------------------------------------------------------------------------
-@app.callback(Output("page-content", "children"), 
-            [Input("url", "pathname")])
+# Page content based on sidebar links (nav)
+@app.callback([Output('page-content', 'children'),
+               Output('page-title', 'children'),
+               Output('nav-dropdown', 'className')], 
+               [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
         return html.Div(        
             [
                 html.P("This is the content of the home page!"),
             ]
-        )
-    elif pathname == "/page-1":
-        return html.P("This is the content of page 1. Yay!")
-    elif pathname == "/page-2":
-        return html.P("Oh cool, this is page 2!")
+        ), 'Home', ''
+    elif pathname == "/complete-route":
+        return html.P("This is the data of the full route. Yay!"), 'Data full route', ''
+    elif pathname in ["/per-viewpoint-1", "/per-viewpoint-2"]:
+        return html.P("This is the data per viewpoint."), 'Data per viewpoint', 'show'
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
-        ]
+        ], 'Error 404', ''
     )
 
+# Filter collapse callback
 @app.callback(
     Output("collapse", "is_open"),
     [Input("collapse-button", "n_clicks")],
