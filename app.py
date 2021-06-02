@@ -2,6 +2,7 @@
 For more details on building multi-page Dash applications, check out the Dash
 documentation: https://dash.plot.ly/urls
 """
+import pandas as pd
 from logging import disable
 import dash
 import dash_bootstrap_components as dbc
@@ -10,6 +11,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+# df = pd.read_csv('./Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
