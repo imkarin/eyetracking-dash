@@ -11,10 +11,13 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+# Load in the data
+print('loading df...')
 df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
 print(df)
 
-# the style arguments for the sidebar. We use position:fixed and a fixed width
+# The style arguments
 SIDEBAR_STYLE = {
     "position": "fixed",
     "top": 0,
@@ -25,14 +28,13 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa",
 }
 
-# the styles for the main content position it to the right of the sidebar and
-# add some padding.
 CONTENT_STYLE = {
     "margin-left": "18rem",
     "margin-right": "2rem",
     "padding": "2rem 1rem",
 }
 
+# Html elements
 sidebar = html.Aside(
     [
         html.H2("Sidebar", className="display-4"),
@@ -95,8 +97,8 @@ header = html.Div(
                                             dcc.Dropdown(
                                                 id='dropdown',
                                                 options=[
-                                                    {'label': 'aaaa', 'value': 'a'},
-                                                    {'label': 'bbbb', 'value': 'b'}
+                                                    {'label': 'MALE', 'value': 'MALE'},
+                                                    {'label': 'FEMALE', 'value': 'FEMALE'}
                                                 ]
                                             )
                                         ]
@@ -140,18 +142,24 @@ app.layout = html.Div(
 )
 
 # Callbacks ----------------------------------------------------------------------------------------------------------------------
-# Page content based on sidebar nav & Store (filter)
+# Page content based on sidebar nav & Store (filter) 
 @app.callback([Output('page-content', 'children'),
                Output('page-title', 'children'),
                Output('nav-dropdown', 'className')], 
                [Input("url", "pathname"),
                 Input('data-storage', 'data')])        # Store
 def render_page_content(pathname, data):
+    # Applying the respondent filters to the df
+    print('copying df:...')
+    dff = df.copy()
+    print('showing filtered df:...')
+    print(dff[dff['Resp gender'].isin(data['gender'])].head())
+
     if pathname == "/":
         return html.Div(        
             [
                 html.P("This is the content of the home page!"),
-                html.P(data['test'])
+                html.P(data['gender'])
             ]
         ), 'Home', ''
     elif pathname == "/complete-route":
@@ -186,7 +194,7 @@ def toggle_collapse(n, is_open):
 )
 def update_filters(ddval, data):
     data = data or {'test': 'x'}
-    data['test'] = ddval
+    data['gender'] = [ddval]
     return data
 
 if __name__ == "__main__":
