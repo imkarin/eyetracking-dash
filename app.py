@@ -137,7 +137,7 @@ app.layout = html.Div(
 )
 
 # Callbacks ----------------------------------------------------------------------------------------------------------------------
-# Page content based on sidebar nav     & Respondent filter
+# Page content based on sidebar nav & Store (filter)
 @app.callback([Output('page-content', 'children'),
                Output('page-title', 'children'),
                Output('nav-dropdown', 'className')], 
@@ -175,7 +175,7 @@ def toggle_collapse(n, is_open):
         return not is_open
     return is_open
 
-# Filter update callback (refreshes the main (content))
+# Filter update callback (puts the filter values in the Store)
 @app.callback(
     Output('data-storage', 'data'),
     [Input('dropdown', 'value'),
