@@ -1,3 +1,4 @@
+/* Layout: global */
 .sidebar {
   position: fixed;
   top: 0;
@@ -12,4 +13,23 @@
   margin-left: 18rem;
   margin-right: 2rem;
   padding: 2rem 1rem;
+}
+
+/* Filter section */
+#collapse {
+  min-width: 100%;
+}
+
+/* Dropdown */
+.filter-dropdown {
+  width: 8rem;
+}
+
+/* Checklist */
+.filter-checklist label {
+  display: block;
+}
+
+.filter-checklist input[type='checkbox'] {
+  margin-right: 4px;
 }

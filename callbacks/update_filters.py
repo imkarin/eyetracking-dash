@@ -8,10 +8,11 @@ from app import app
 
 @app.callback(
     Output('data-storage', 'data'),
-    [Input('dropdown', 'value'),
+    [Input('filter-gender-checklist', 'value'),
      State('data-storage', 'data')]
 )
 def update_filters(ddval, data):
     data = data or {'test': 'x'}
     data['gender'] = [ddval]
+    print(data['gender'])
     return data

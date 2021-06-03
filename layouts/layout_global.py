@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
+from datetime import date
+
 # HTML elements that occur in all pages (sidebar, header)
 sidebar = html.Aside(
     [
@@ -46,6 +48,7 @@ header = html.Div(
                         "Home",
                         id="page-title"
                     ),
+                    width=3
                 ),
                 
                 # Filter respondents (collapse)
@@ -63,17 +66,73 @@ header = html.Div(
                                     html.Label(
                                         [
                                             "Gender",
-                                            dcc.Dropdown(
-                                                id='dropdown',
+                                            dcc.Checklist(
+                                                id='filter-gender-checklist',
+                                                className='m-2',
                                                 options=[
                                                     {'label': 'MALE', 'value': 'MALE'},
                                                     {'label': 'FEMALE', 'value': 'FEMALE'}
                                                 ]
                                             )
+                                        ],
+                                        className='filter-checklist'
+                                    ),
+                                    html.Label(
+                                        [
+                                            "Age",
+                                            dcc.RangeSlider(
+                                                id='filter-age-slider',
+                                                className='m-2',
+                                                min=16,
+                                                max=18,
+                                                step=1,
+                                                marks={
+                                                    16: '16',
+                                                    17: '17',
+                                                    18: '18'
+                                                }
+                                            )
                                         ]
+                                    ),
+                                    html.Div(
+                                        [
+                                            html.P("Time of recording"),
+                                            html.Div(
+                                                [
+                                                    html.Label(
+                                                        [
+                                                            'Begin',
+                                                            dcc.Input(
+                                                                id='filter-timebegin-input',
+                                                                type='text',
+                                                                maxLength=5,
+                                                                value="00:00",
+                                                                placeholder="00:00"
+                                                            )
+                                                        ],
+                                                    ),
+                                                    html.Label(
+                                                        [
+                                                            'End',
+                                                            dcc.Input(
+                                                                id='filter-timeend-input',
+                                                                type='text',
+                                                                maxLength=5,
+                                                                value='23:59',
+                                                                placeholder='23:59'
+                                                            )
+                                                        ]
+                                                    )
+                                                ],
+                                                className='d-flex justify-content-between'
+                                            )
+                                        ],
+                                        className='filter-time-rec'
                                     )
-                                ]),
-                                id="collapse",
+
+                                ],
+                                className='px-3 pt-3 pb-2'),    # Card class
+                                id="collapse",                  # Collapse id
                             ),
                         ],
                         className='mb-4 d-flex flex-column align-items-end'

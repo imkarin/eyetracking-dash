@@ -15,9 +15,9 @@ from layouts.layout_global import header, sidebar
 from callbacks import toggle_filter_collapse
 
 # Load in the data
-print('loading df...')
-df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
-print(df)
+# print('loading df...')
+# df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='Unnamed: 0')
+# print(df)
 
 
 # Content section (plots go here)
@@ -46,19 +46,20 @@ app.layout = html.Div(
 )
 
 # Callbacks ----------------------------------------------------------------------------------------------------------------------
-# Page content based on sidebar nav & Store (filter) 
+# PAGE 'ROUTING' / REFRESHING ON FILTER CHANGE
 @app.callback([Output('page-content', 'children'),
                Output('page-title', 'children'),
                Output('nav-dropdown', 'className')], 
                [Input("url", "pathname"),
                 Input('data-storage', 'data')])        # Store (contains filters)
 def render_page_content(pathname, data):
-    # Applying the respondent filters to the df
-    print('copying df:...')
-    dff = df.copy()
-    print('showing filtered df:...')
-    print(dff[dff['Resp gender'].isin(data['gender'])].head())
+    # Set the new DF: apply the new filters
+    # print('copying df:...')
+    # dff = df.copy()
+    # print('showing filtered df:...')
+    # print(dff[dff['Resp gender'].isin(data['gender'])].head())
 
+    # Return new page content, with plots based on new DF
     # Page: Home
     if pathname == "/":
         return html.Div(
@@ -85,5 +86,6 @@ def render_page_content(pathname, data):
         ], 'Error 404', ''
     )
 
+# Run the server
 if __name__ == "__main__":
     app.run_server(debug=True)
