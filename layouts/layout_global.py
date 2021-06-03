@@ -44,16 +44,21 @@ header = html.Div(
         dbc.Row(
             [   # Paginatitel
                 dbc.Col(
-                    html.H2(
-                        "Home",
-                        id="page-title"
-                    ),
-                    width=3
+                    width=3,
+                    children=
+                    [
+                        html.H2(
+                            "Home",
+                            id="page-title"
+                        ),
+                    ]
                 ),
                 
                 # Filter respondents (collapse)
                 dbc.Col(
                     html.Div(
+                        className='mb-4 d-flex flex-column align-items-end',
+                        children=
                         [
                             dbc.Button(
                                 "Filter respondents",
@@ -62,83 +67,88 @@ header = html.Div(
                                 color="primary",
                             ),
                             dbc.Collapse(
-                                dbc.Card([
-                                    html.Label(
+                                id="collapse",
+                                children=
+                                [
+                                    dbc.Card(
+                                        className='px-3 pt-3 pb-2',
+                                        children=
                                         [
-                                            "Gender",
-                                            dcc.Checklist(
-                                                id='filter-gender-checklist',
-                                                className='m-2',
-                                                options=[
-                                                    {'label': 'MALE', 'value': 'MALE'},
-                                                    {'label': 'FEMALE', 'value': 'FEMALE'}
-                                                ]
-                                            )
-                                        ],
-                                        className='filter-checklist'
-                                    ),
-                                    html.Label(
-                                        [
-                                            "Age",
-                                            dcc.RangeSlider(
-                                                id='filter-age-slider',
-                                                className='m-2',
-                                                min=16,
-                                                max=18,
-                                                step=1,
-                                                marks={
-                                                    16: '16',
-                                                    17: '17',
-                                                    18: '18'
-                                                }
-                                            )
-                                        ]
-                                    ),
-                                    html.Div(
-                                        [
-                                            html.P("Time of recording"),
-                                            html.Div(
+                                            html.Label(
                                                 [
-                                                    html.Label(
-                                                        [
-                                                            'Begin',
-                                                            dcc.Input(
-                                                                id='filter-timebegin-input',
-                                                                type='text',
-                                                                maxLength=5,
-                                                                value="00:00",
-                                                                placeholder="00:00"
-                                                            )
-                                                        ],
-                                                    ),
-                                                    html.Label(
-                                                        [
-                                                            'End',
-                                                            dcc.Input(
-                                                                id='filter-timeend-input',
-                                                                type='text',
-                                                                maxLength=5,
-                                                                value='23:59',
-                                                                placeholder='23:59'
-                                                            )
+                                                    "Gender",
+                                                    dcc.Checklist(
+                                                        id='filter-gender-checklist',
+                                                        className='m-2',
+                                                        options=[
+                                                            {'label': 'MALE', 'value': 'MALE'},
+                                                            {'label': 'FEMALE', 'value': 'FEMALE'}
                                                         ]
                                                     )
                                                 ],
-                                                className='d-flex justify-content-between'
+                                                className='filter-checklist'
+                                            ),
+                                            html.Label(
+                                                [
+                                                    "Age",
+                                                    dcc.RangeSlider(
+                                                        id='filter-age-slider',
+                                                        className='m-2',
+                                                        min=16,
+                                                        max=18,
+                                                        step=1,
+                                                        marks={
+                                                            16: '16',
+                                                            17: '17',
+                                                            18: '18'
+                                                        }
+                                                    )
+                                                ]
+                                            ),
+                                            html.Div(
+                                                [
+                                                    html.P("Time of recording"),
+                                                    html.Div(
+                                                        [
+                                                            html.Label(
+                                                                [
+                                                                    'Begin',
+                                                                    dcc.Input(
+                                                                        id='filter-timebegin-input',
+                                                                        type='text',
+                                                                        maxLength=5,
+                                                                        value="00:00",
+                                                                        placeholder="00:00"
+                                                                    )
+                                                                ],
+                                                            ),
+                                                            html.Label(
+                                                                [
+                                                                    'End',
+                                                                    dcc.Input(
+                                                                        id='filter-timeend-input',
+                                                                        type='text',
+                                                                        maxLength=5,
+                                                                        value='23:59',
+                                                                        placeholder='23:59'
+                                                                    )
+                                                                ]
+                                                            )
+                                                        ],
+                                                        className='d-flex justify-content-between'
+                                                    )
+                                                ],
+                                                className='filter-time-rec'
                                             )
-                                        ],
-                                        className='filter-time-rec'
-                                    )
 
-                                ],
-                                className='px-3 pt-3 pb-2'),    # Card class
-                                id="collapse",                  # Collapse id
-                            ),
+                                        ]
+                                    ),  # End Card
+                                ]
+                            ), # End Collapse
                         ],
-                        className='mb-4 d-flex flex-column align-items-end'
-                    ),
-                )
+                    ), # End Div
+                ) # End Col
             ]
-        )
+        ) # End Row
     ]
-)
+) # End Div (Header)
