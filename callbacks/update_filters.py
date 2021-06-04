@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
@@ -16,9 +17,9 @@ from app import app
 )
 def update_filters(gender, age, timebegin, timeend, data):
     data = data or {'test': 'x'}
-    data['gender'] = gender
-    data['age'] = list(range(age[0], age[1]+1))
-    data['time'] = [timebegin, timeend]
-
-    print(data['time'])
+    data['gender'] = gender                      # list of genders
+    data['age'] = list(range(age[0], age[1]+1))  # list of ages
+    data['time'] = [timebegin, timeend]          # list of strings representing time
+                                                 # will be processed in index.py
+                                                 # because dcc.Store can't hold datetime types
     return data

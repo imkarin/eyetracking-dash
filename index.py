@@ -3,13 +3,13 @@ For more details on building multi-page Dash applications, check out the Dash
 documentation: https://dash.plot.ly/urls
 """
 import pandas as pd
-from logging import disable
+import plotly.express as px
 import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-import plotly.express as px
+from dash.exceptions import PreventUpdate
 
 from app import app
 from callbacks import toggle_filter_collapse, update_filters
@@ -26,8 +26,6 @@ df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='
 # Df preparation
 df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
-
-# print(df.loc[0, 'Resp rec datetime'].time() > pd.to_datetime('23:00').time())
 
 
 # Content section (plots go here)
@@ -63,18 +61,24 @@ app.layout = html.Div(
                [Input("url", "pathname"),
                 Input('data-storage', 'data')])        # Store (contains filters)
 def render_page_content(pathname, data):
-    # Set the new DF: apply the new filters
-    print('Showing filtered df...')
+    # Apply the new filters (new DF)
     dff = df.copy()
-
     gender_filter = (dff['Resp gender'].isin(data['gender']))
     age_filter = (dff['Resp age'].isin(data['age']))
-
-    timebegin = pd.to_datetime(data['time'][0]).time()
-    timeend = pd.to_datetime(data['time'][1]).time()
-    time_filter = (dff['Resp rec datetime'].dt.time >= timebegin) & (dff['Resp rec datetime'].dt.time <= timeend)
+    timebegin = pd.to_datetime(data['time'][0], errors='coerce')
+    timeend = pd.to_datetime(data['time'][1], errors='coerce')
+    
+    if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
+        time_filter = True
+    else:
+        time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
+                    & (dff['Resp rec datetime'].dt.time <= timeend.time()))
 
     dff = dff[gender_filter & age_filter & time_filter]
+
+    # If filters don't match anything, don't update
+    if (len(dff) == 0):
+        raise PreventUpdate
 
 
     # Return new page content, with plots based on new DF
