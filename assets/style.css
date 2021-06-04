@@ -15,8 +15,9 @@
   padding: 2rem 1rem;
 }
 
+
 /* Filter section */
-#collapse {
+#filter-collapse {
   min-width: 100%;
 }
 
@@ -32,4 +33,19 @@
 
 .filter-checklist input[type='checkbox'] {
   margin-right: 4px;
+}
+
+/* Time filters */
+#filter-timeend-input, #filter-timebegin-input {
+  width: 100px;
+  height: 30px;
+}
+
+/* In case the controls in the filter section go super small: */
+#filter-collapse label {
+  min-width: 100%;
+}
+
+#filter-collapse [class*='col'] {
+  min-width: 150px;
 }

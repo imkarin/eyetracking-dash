@@ -8,9 +8,9 @@ from app import app
 
 # Filter collapse callback
 @app.callback(
-    Output("collapse", "is_open"),
+    Output("filter-collapse", "is_open"),
     [Input("collapse-button", "n_clicks")],
-    [State("collapse", "is_open")],
+    [State("filter-collapse", "is_open")],
 )
 def toggle_filter_collapse(n, is_open):
     if n:
