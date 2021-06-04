@@ -9,15 +9,20 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+import plotly.express as px
 
 from app import app
+from callbacks import toggle_filter_collapse, update_filters
 from layouts.layout_global import header, sidebar
-from callbacks import toggle_filter_collapse
+from layouts.layout_home import layout_home
+from layouts.layout_fullroute import layout_fullroute
+from layouts.layout_perviewpoint import layout_perviewpoint
+import layouts.layout_sources
 
 # Load in the data
-# print('loading df...')
-# df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='Unnamed: 0')
-# print(df)
+print('loading df...')
+df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+print(df)
 
 
 # Content section (plots go here)
@@ -54,20 +59,15 @@ app.layout = html.Div(
                 Input('data-storage', 'data')])        # Store (contains filters)
 def render_page_content(pathname, data):
     # Set the new DF: apply the new filters
-    # print('copying df:...')
-    # dff = df.copy()
-    # print('showing filtered df:...')
-    # print(dff[dff['Resp gender'].isin(data['gender'])].head())
+    print('showing filtered df:...')
+    dff = df.copy()
+    dff = dff[dff['Resp gender'].isin(data['gender'])]
+
 
     # Return new page content, with plots based on new DF
     # Page: Home
     if pathname == "/":
-        return html.Div(
-            [
-                html.P("This is the content of the home page!"),
-                html.P(data['gender'])
-            ]
-        ), 'Home', ''
+        return layout_home(dff), 'Home', ''
     
     # Page: Data full route
     elif pathname == "/full-route":

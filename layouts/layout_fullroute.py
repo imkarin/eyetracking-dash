@@ -1,6 +1,30 @@
+import pandas as pd
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+import plotly.express as px
 
-# HTML elements in the page-content section of the page: Data full route
+from app import app
+
+# Layout of the page: Data full route
+# This function generates the html elements
+# with updated plots that match the filters (respondents)
+
+def layout_fullroute(df):
+    # figures
+    # fig = 
+    
+    # page layout
+    layout = [
+        dbc.Row(
+            children=
+            [
+                dbc.Col(
+                    dcc.Graph()
+                )
+            ]
+        )
+    ]
+
+    return layout

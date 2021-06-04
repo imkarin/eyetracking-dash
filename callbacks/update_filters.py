@@ -9,10 +9,16 @@ from app import app
 @app.callback(
     Output('data-storage', 'data'),
     [Input('filter-gender-checklist', 'value'),
+     Input('filter-age-slider', 'value'),
+     Input('filter-timebegin-input', 'value'),
+     Input('filter-timeend-input', 'value'),
      State('data-storage', 'data')]
 )
-def update_filters(ddval, data):
+def update_filters(gender, age, timebegin, timeend, data):
     data = data or {'test': 'x'}
-    data['gender'] = [ddval]
-    print(data['gender'])
+    data['gender'] = gender
+    data['age'] = list(range(age[0], age[1]+1))
+    data['time'] = [timebegin, timeend]
+    print(data['time'])
+    print(data['age'])
     return data
