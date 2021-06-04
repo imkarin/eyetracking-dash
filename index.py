@@ -62,7 +62,10 @@ def render_page_content(pathname, data):
     # Set the new DF: apply the new filters
     print('Showing filtered df...')
     dff = df.copy()
-    dff = dff[dff['Resp gender'].isin(data['gender'])]
+
+    gender_filter = (dff['Resp gender'].isin(data['gender']))
+    age_filter = (dff['Resp age'].isin(data['age']))
+    dff = dff[gender_filter & age_filter]
 
 
     # Return new page content, with plots based on new DF
