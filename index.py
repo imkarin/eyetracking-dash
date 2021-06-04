@@ -88,11 +88,15 @@ def render_page_content(pathname, data):
     
     # Page: Data full route
     elif pathname == "/full-route":
-        return html.P("This is the data of the full route. Yay!"), 'Data full route', ''
+        return layout_fullroute(dff), 'Data full route', ''
     
     # Page: Data per viewpoint
     elif pathname in ["/per-viewpoint-1", "/per-viewpoint-2"]:
-        return html.P("This is the data per viewpoint."), 'Data per viewpoint', 'show'
+        return layout_perviewpoint(dff), 'Data per viewpoint', 'show'
+
+    # Page: Sources
+    elif pathname == "/sources":
+        return html.P("This is the sources page."), 'Sources', ''
 
     # Page: 404
     return dbc.Jumbotron(

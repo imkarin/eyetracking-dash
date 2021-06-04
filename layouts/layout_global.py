@@ -40,7 +40,7 @@ sidebar = html.Aside(
 )
 
 header = html.Header(
-    className='pt-4 mb-5',
+    className='pt-4 mb-1',
     children=
     [
         dbc.Row(
@@ -73,7 +73,7 @@ header = html.Header(
                                 children=
                                 [
                                     dbc.Card(
-                                        className='px-3 pt-3 pb-2',
+                                        className='px-3 pt-3 pb-2 mb-3',
                                         children=
                                         [
                                             dbc.Row(

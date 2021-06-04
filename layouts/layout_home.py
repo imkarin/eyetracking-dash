@@ -7,12 +7,12 @@ import plotly.express as px
 
 from app import app
 
-# Layout of the page: Home
-# This function generates the html elements
-# with updated plots that match the filters (respondents)
+# Layout of the page: HOME
+# The functions in this file generate the HTML elements with updated plots
+# This page has no tabs.
 
+# Combined layout:
 def layout_home(df):
-    # figures
     fig_rectime = px.scatter(x=df['Resp rec datetime'].unique(),
                              y=df['Resp name'].unique(),
                              title='Starttime recording')
@@ -28,7 +28,7 @@ def layout_home(df):
         ages.append(df[df['Resp name'] == resp]['Resp age'].iloc[0])
 
     fig_age = px.histogram(ages, title='Ages')
-    
+
 
     # other info
     date = df['Resp rec datetime'].dt.date.mode()[0]
@@ -36,7 +36,7 @@ def layout_home(df):
     # page layout
     layout = [
         html.Section(
-            className='',
+            className='mt-5',
             children=
             [
                 html.H4('Recording session'),
@@ -60,7 +60,6 @@ def layout_home(df):
                         # )
                     ]
                 ),
-                # html.Hr(),
             ]
         ),  # End Section 'recording session'
 
@@ -68,8 +67,7 @@ def layout_home(df):
             className='',
             children=
             [
-                html.H4("Respondent info"),
-                # html.Hr(),
+                html.H4("Respondents"),
                 html.P('Information about the respondents of the recording sessions'),
                 dbc.Row(
                     children=
@@ -92,7 +90,5 @@ def layout_home(df):
                 )
             ]
         )   # End Section 'respondent info'
-        
     ]
-
     return layout

@@ -7,6 +7,7 @@
   width: 16rem;
   padding: 2rem 1rem;
   background: #f8f9fa;
+  z-index:999;
 }
 
 #main {
@@ -16,7 +17,7 @@
 }
 
 section:not(:last-of-type) {
-  margin-bottom: 8rem;
+  margin-bottom: 5rem;
 }
 
 
