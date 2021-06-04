@@ -39,7 +39,9 @@ sidebar = html.Aside(
     className='sidebar',
 )
 
-header = html.Div(
+header = html.Header(
+    className='pt-4 mb-5',
+    children=
     [
         dbc.Row(
             [   # Paginatitel
@@ -57,7 +59,7 @@ header = html.Div(
                 # Filter respondents (collapse)
                 dbc.Col(
                     html.Div(
-                        className='mb-4 d-flex flex-column align-items-end',
+                        className='d-flex flex-column align-items-end',
                         children=
                         [
                             dbc.Button(

@@ -13,19 +13,86 @@ from app import app
 
 def layout_home(df):
     # figures
-    fig = px.scatter(x=df['Resp rec datetime'].unique(),
-                     y=df['Resp name'].unique())
+    fig_rectime = px.scatter(x=df['Resp rec datetime'].unique(),
+                             y=df['Resp name'].unique(),
+                             title='Starttime recording')
     
+    genders = []    
+    for resp in df['Resp name'].unique():
+        genders.append(df[df['Resp name'] == resp]['Resp gender'].iloc[0])
+
+    fig_gender = px.pie(genders, names=genders, title='Genders')
+
+    ages = []
+    for resp in df['Resp name'].unique():
+        ages.append(df[df['Resp name'] == resp]['Resp age'].iloc[0])
+
+    fig_age = px.histogram(ages, title='Ages')
+    
+
+    # other info
+    date = df['Resp rec datetime'].dt.date.mode()[0]
+
     # page layout
     layout = [
-        dbc.Row(
+        html.Section(
+            className='',
             children=
             [
-                dbc.Col(
-                    dcc.Graph(figure=fig)
+                html.H4('Recording session'),
+                html.P(f'Information about the recording sessions in Amsterdam, on {date}.'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(   # recording start time
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_rectime)
+                            ]
+                        ),
+                        # dbc.Col(    # recording start time
+                        #     width=6,
+                        #     children=
+                        #     [
+                        #         dcc.Graph(figure=fig_rectime)
+                        #     ]
+                        # )
+                    ]
+                ),
+                # html.Hr(),
+            ]
+        ),  # End Section 'recording session'
+
+        html.Section(
+            className='',
+            children=
+            [
+                html.H4("Respondent info"),
+                # html.Hr(),
+                html.P('Information about the respondents of the recording sessions'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(    # gender pie
+                            width=6,
+                            children=
+                            [   
+                                dcc.Graph(figure=fig_gender)
+                            ]
+                        ),
+                        dbc.Col(    # age counts
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_age)
+                            ]
+                        ),
+                    ]
                 )
             ]
-        )
+        )   # End Section 'respondent info'
+        
     ]
 
     return layout

@@ -19,10 +19,11 @@ from layouts.layout_fullroute import layout_fullroute
 from layouts.layout_perviewpoint import layout_perviewpoint
 import layouts.layout_sources
 
-# Load in the data
-print('loading df...')
-df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+# Load in the data (smaller version for development)
+print('Loading df...')
+df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
 print(df)
+df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
 
 
 # Content section (plots go here)
@@ -59,7 +60,7 @@ app.layout = html.Div(
                 Input('data-storage', 'data')])        # Store (contains filters)
 def render_page_content(pathname, data):
     # Set the new DF: apply the new filters
-    print('showing filtered df:...')
+    print('Showing filtered df...')
     dff = df.copy()
     dff = dff[dff['Resp gender'].isin(data['gender'])]
 
