@@ -22,8 +22,12 @@ import layouts.layout_sources
 # Load in the data (smaller version for development)
 print('Loading df...')
 df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
-print(df)
+
+# Df preparation
+df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
+
+# print(df.loc[0, 'Resp rec datetime'].time() > pd.to_datetime('23:00').time())
 
 
 # Content section (plots go here)
@@ -65,7 +69,12 @@ def render_page_content(pathname, data):
 
     gender_filter = (dff['Resp gender'].isin(data['gender']))
     age_filter = (dff['Resp age'].isin(data['age']))
-    dff = dff[gender_filter & age_filter]
+
+    timebegin = pd.to_datetime(data['time'][0]).time()
+    timeend = pd.to_datetime(data['time'][1]).time()
+    time_filter = (dff['Resp rec datetime'].dt.time >= timebegin) & (dff['Resp rec datetime'].dt.time <= timeend)
+
+    dff = dff[gender_filter & age_filter & time_filter]
 
 
     # Return new page content, with plots based on new DF

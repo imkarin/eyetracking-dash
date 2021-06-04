@@ -19,6 +19,6 @@ def update_filters(gender, age, timebegin, timeend, data):
     data['gender'] = gender
     data['age'] = list(range(age[0], age[1]+1))
     data['time'] = [timebegin, timeend]
+
     print(data['time'])
-    print(data['age'])
     return data
