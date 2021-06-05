@@ -39,6 +39,7 @@ def tab_eyes(df):
     # the layout
     tab_layout = [
         # html elements/plots (containing the figs) here
+        html.P("Hallo")
     ]
     return tab_layout
 

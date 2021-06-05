@@ -92,7 +92,7 @@ def render_page_content(pathname, data):
     
     # Page: Data per viewpoint
     elif pathname in ["/per-viewpoint-1", "/per-viewpoint-2"]:
-        return layout_perviewpoint(dff), 'Data per viewpoint', 'show'
+        return layout_perviewpoint(dff, pathname), 'Data per viewpoint', 'show'
 
     # Page: Sources
     elif pathname == "/sources":

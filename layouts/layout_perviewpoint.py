@@ -18,7 +18,9 @@ from app import app
 # - layout_home combines all the tabs into 1 page layout
 
 # Combined layout:
-def layout_perviewpoint(df):
+def layout_perviewpoint(df, pathname):
+    # Filter DF based on pathname (welke viewpoint is het)
+
     layout = [
         dcc.Tabs(
             className='mb-5',
