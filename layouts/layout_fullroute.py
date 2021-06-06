@@ -409,52 +409,207 @@ def tab_movement(df):
                         )
                     ]
                 ),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_gsrraw)
-        #                     ]
-        #                 ),
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_gsrinter)
-        #                     ]
-        #                 ),
-        #             ]
-        #         ),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_intertonic)
-        #                     ]
-        #                 ),
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_interphasic)
-        #                     ]
-        #                 ),
-        #             ]
-                # ),
             ]
         ),
+
     ]
     return tab_layout
 
 # Tab 4: Data quality
 def tab_quality(df):
+
+    fig_eye3d = px.scatter_3d(df,
+                x='ET_DistanceLeft',
+                y='ET_DistanceRight',
+                z='ET_Distance3D')
+
+    fig_int = px.line(df,
+                y='Interpolated Distance',
+                title='Interpolated Distance')
+
+    fig_pupilscat = px.scatter(df,
+                        x='ET_PupilLeft',
+                        y='ET_PupilRight',
+                        title='Pupil size',
+                        labels={
+                            "ET_PupilLeft": "Pupil left (mm)",
+                            "ET_PupilRight": "Pupil right (mm)"})
+
+    fig_val = px.line(df,
+                x='ET_ValidityLeftEye',
+                y='ET_ValidityRightEye',
+                title='Eye Validity')
+
+    fig_xbar = px.bar(df,
+                x='ET_GazeDirectionLeftX',
+                y='ET_GazeDirectionRightX')
+
+    fig_xcolumn = px.line(df,
+                x='ET_GazeDirectionLeftX',
+                y='ET_GazeDirectionRightX')
+
+    fig_xline = px.line(df,
+                x='ET_GazeDirectionLeftX',
+                y='ET_GazeDirectionRightX')
+
+    fig_ybar = px.bar(df,
+                x='ET_GazeDirectionLeftY',
+                y='ET_GazeDirectionRightY')
+
+    fig_ycolumn = px.line(df,
+                x='ET_GazeDirectionLeftY',
+                y='ET_GazeDirectionRightY')
+
+    fig_yline = px.line(df,
+                x='ET_GazeDirectionLeftY',
+                y='ET_GazeDirectionRightY')
+
+    fig_zbar = px.bar(df,
+                x='ET_GazeDirectionLeftZ',
+                y='ET_GazeDirectionRightZ')
+
+    fig_zcolumn = px.line(df,
+                x='ET_GazeDirectionLeftZ',
+                y='ET_GazeDirectionRightZ')
+
+    fig_zline = px.line(df,
+                x='ET_GazeDirectionLeftZ',
+                y='ET_GazeDirectionRightZ')
+
     tab_layout = [
-        # html elements/plots here
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Header'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_eye3d)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_int)
+                            ]
+                        ),
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_pupilscat)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_val)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Direction'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_xbar)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_xcolumn)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_xline)
+                            ]
+                        ),
+
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_ybar)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_ycolumn)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_yline)
+                            ]
+                        ),
+
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_zbar)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_zcolumn)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_zline)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
     ]
     return tab_layout
