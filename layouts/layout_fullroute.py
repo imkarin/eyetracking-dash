@@ -34,12 +34,96 @@ def layout_fullroute(df):
 
 # Tab 1: Eyes
 def tab_eyes(df):
-    # figures/variables here...
+    fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
+                             y=df['ET_Gaze3DY'],
+                             z=df['ET_Gaze3DZ'],
+                             title='Gaze X, Y and Z',
+                             size_max=10,
+                             opacity=0.5)
+
+    fig_pupil = px.scatter(df,
+                        x='ET_PupilLeft',
+                        y='ET_PupilRight',
+                        title='Pupil size',
+                        labels={
+                            "ET_PupilLeft": "Pupil left (mm)",
+                            "ET_PupilRight": "Pupil right (mm)"})
+                    
+    fig_2dgazeinter = px.scatter(df,
+                            x='Interpolated Gaze X',
+                            y='Interpolated Gaze Y',
+                            title='Interpolated Gaze')
+
+    fig_2dgazeinterline = px.line(df,
+                            x='Interpolated Gaze X',
+                            y='Interpolated Gaze Y',
+                            title='Interpolated Gaze')
 
     # the layout
     tab_layout = [
-        # html elements/plots (containing the figs) here
-        html.P("Hallo")
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Header'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_3dgaze)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_pupil)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_2dgazeinter)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_2dgazeinterline)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),  
     ]
     return tab_layout
 
