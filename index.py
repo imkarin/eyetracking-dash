@@ -23,6 +23,7 @@ import base64
 
 # Load in the data (smaller version for development)
 print('Loading df...')
+print('Df loaded!')
 df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
 # df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
 
@@ -66,44 +67,50 @@ app.layout = html.Div(
 def render_page_content(pathname, data):
     # Apply the new filters (new DF)
     dff = df.copy()
+    
+    # Filtering by viewpoint: 
     if pathname == '/viewpoint-1':
         dff = dff[dff['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 'Viewpoint_1']
-
         image_filename = 'assets\img\Viewport_Panorama-1.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+
     elif pathname == '/viewpoint-2':
         dff = dff[dff['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 'Viewpoint_2']
-
         image_filename = 'assets\img\Viewport_Panorama-2.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+
     elif pathname == '/viewpoint-3':
         dff = dff[dff['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 'Viewpoint_3']
-
         image_filename = 'assets\img\Viewport_Panorama-3.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+
     elif pathname == '/viewpoint-4':
         dff = dff[dff['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 'Viewpoint_4']
-
         image_filename = 'assets\img\Viewport_Panorama-4.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+
     elif pathname == '/viewpoint-5':
         dff = dff[dff['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 'Viewpoint_5']
-
         image_filename = 'assets\img\Viewport_Panorama-5.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
 
-    gender_filter = (dff['Resp gender'].isin(data['gender']))
-    age_filter = (dff['Resp age'].isin(data['age']))
-    timebegin = pd.to_datetime(data['time'][0], errors='coerce')
-    timeend = pd.to_datetime(data['time'][1], errors='coerce')
-    
-    if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
-        time_filter = True
-    else:
-        time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
-                    & (dff['Resp rec datetime'].dt.time <= timeend.time()))
+    # Filter by respondent:
+    name_filter = (dff['Resp name'] == data['respname'])
 
-    dff = dff[gender_filter & age_filter & time_filter]
+# Old filters:
+    # gender_filter = (dff['Resp gender'].isin(data['gender']))
+    # age_filter = (dff['Resp age'].isin(data['age']))
+    # timebegin = pd.to_datetime(data['time'][0], errors='coerce')
+    # timeend = pd.to_datetime(data['time'][1], errors='coerce')
+    
+    # if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
+    #     time_filter = True
+    # else:
+    #     time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
+    #                 & (dff['Resp rec datetime'].dt.time <= timeend.time()))
+
+    dff = dff[name_filter]
+        # gender_filter & age_filter & time_filter]
 
     # If filters don't match anything, don't update
     if (len(dff) == 0):

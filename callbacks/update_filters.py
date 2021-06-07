@@ -9,17 +9,21 @@ from app import app
 
 @app.callback(
     Output('data-storage', 'data'),
-    [Input('filter-gender-checklist', 'value'),
-     Input('filter-age-slider', 'value'),
-     Input('filter-timebegin-input', 'value'),
-     Input('filter-timeend-input', 'value'),
+    [Input('filter-respname', 'value'),
+    #  Input('filter-gender-checklist', 'value'),
+    #  Input('filter-age-slider', 'value'),
+    #  Input('filter-timebegin-input', 'value'),
+    #  Input('filter-timeend-input', 'value'),
      State('data-storage', 'data')]
 )
-def update_filters(gender, age, timebegin, timeend, data):
+def update_filters(respname, data):
     data = data or {'test': 'x'}
-    data['gender'] = gender                      # list of genders
-    data['age'] = list(range(age[0], age[1]+1))  # list of ages
-    data['time'] = [timebegin, timeend]          # list of strings representing time
-                                                 # will be processed in index.py
-                                                 # because dcc.Store can't hold datetime types
+    data['respname'] = respname
+    # Old filters:
+    # data['gender'] = gender                      # list of genders
+    # data['age'] = list(range(age[0], age[1]+1))  # list of ages
+    # data['time'] = [timebegin, timeend]          # list of strings representing time
+    #                                              # will be processed in index.py
+    #                                              # because dcc.Store can't hold datetime types
+
     return data
