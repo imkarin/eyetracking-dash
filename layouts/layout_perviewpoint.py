@@ -18,14 +18,14 @@ from app import app
 # - layout_home combines all the tabs into 1 page layout
 
 # Combined layout:
-def layout_perviewpoint(df, pathname):
+def layout_perviewpoint(df, pathname, bgimg):
     # Filter DF based on pathname (welke viewpoint is het)
     layout = [
         dcc.Tabs(
             className='mb-5',
             children=
             [
-                dcc.Tab(label='Eyetracker', children=tab_eyes(df)),
+                dcc.Tab(label='Eyetracker', children=tab_eyes(df, bgimg)),
                 dcc.Tab(label='GSR', children=tab_gsr(df)),
                 dcc.Tab(label='Head movement', children=tab_movement(df)),
                 dcc.Tab(label='Data quality', children=tab_quality(df)),
@@ -34,12 +34,94 @@ def layout_perviewpoint(df, pathname):
     return layout
 
 # Tab 1: Eyes
-def tab_eyes(df):
-    # figures/variables here...
+def tab_eyes(df, bgimg):
+    fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
+                             y=df['ET_Gaze3DY'],
+                             z=df['ET_Gaze3DZ'],
+                             title='Gaze X, Y and Z',
+                             size_max=10,
+                             opacity=0.5)
+
+    fig_2dgazeinter = px.scatter(df,
+                            x='Interpolated Gaze X',
+                            y='Interpolated Gaze Y',
+                            title='Interpolated Gaze')
+
+    fig_2dgazeinter.update_layout(
+                images= [dict(
+                    source='data:image/png;base64,{}'.format(bgimg.decode()),
+                    xref="paper", yref="paper",
+                    sizing='stretch',
+                    opacity=1,
+                    x=0, y=1,
+                    sizex=1, sizey=1,
+                    xanchor="left",
+                    yanchor="top",
+                    #sizing="stretch",
+                    layer="below")])
+
+    fig_pupilscat = px.scatter(df,
+                        x='ET_PupilLeft',
+                        y='ET_PupilRight',
+                        title='Pupil size',
+                        labels={
+                            "ET_PupilLeft": "Pupil left (mm)",
+                            "ET_PupilRight": "Pupil right (mm)"})
+
+    fig_blink = px.histogram(df,
+                        x='Blink detected (binary)',
+                        title='Detected blinks',
+                        nbins=2)
+
 
     # the layout
     tab_layout = [
-        # html elements/plots (containing the figs) here
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Header'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_3dgaze)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_2dgazeinter)
+                            ]
+                        ),
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_pupilscat)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_blink)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
     ]
     return tab_layout
 

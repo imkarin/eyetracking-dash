@@ -63,11 +63,11 @@ def tab_eyes(df):
 
     #set a local image as a background
     image_filename = 'assets\img\Viewport_Panorama-1.jpg'
-    plotly_logo = base64.b64encode(open(image_filename, 'rb').read())
+    bgimg = base64.b64encode(open(image_filename, 'rb').read())
 
     fig_2dgazeinter.update_layout(
                 images= [dict(
-                    source='data:image/png;base64,{}'.format(plotly_logo.decode()),
+                    source='data:image/png;base64,{}'.format(bgimg.decode()),
                     xref="paper", yref="paper",
                     sizing='stretch',
                     opacity=1,
