@@ -1,3 +1,4 @@
+from numpy import diff
 import pandas as pd
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -20,28 +21,58 @@ from app import app
 
 # Combined layout:
 def layout_fullroute(df):
-    layout = [
+    # global dff 
+    # dff = df.copy()
+
+    layout = html.Div([
         dcc.Tabs(
+            id='tabs-nav',
+            value='tab-eyetracker',
             className='mb-5',
             children=
             [
-                dcc.Tab(label='Eyetracker', children=tab_eyes(df)),
-                dcc.Tab(label='GSR', children=tab_gsr(df)),
-                dcc.Tab(label='Head movement', children=tab_movement(df)),
-                dcc.Tab(label='Data quality', children=tab_quality(df)),
-        ])
-    ]
+                dcc.Tab(label='Eyetracker', value='tab-eyetracker', children=tab_eyes(df)),
+                dcc.Tab(label='GSR', value='tab-gsr', children=tab_gsr(df)),
+                dcc.Tab(label='Head movement', value='tab-movement', children=tab_movement(df)),
+                dcc.Tab(label='Data quality', value='tab-quality', children=tab_quality(df)),
+        ]),
+        html.Div(id='tabs-content')
+    ])
     return layout
+
+# ROUTING TABS: The clicked tab determines the content shown in the tabs-content Div
+# @app.callback(Output('tabs-content', 'children'),
+#               Input('tabs-nav', 'value'))
+# def show_tabcontent(tab):
+#     if tab == 'tab-eyetracker':
+#         return tab_eyes(dff)
+
+#     elif tab == 'tab-gsr':
+#         return tab_gsr(dff)
+    
+#     elif tab == 'tab-movement':
+#         return tab_quality(dff)
+        
+#     elif tab == 'tab-quality':
+#         return tab_movement(dff)
+
 
 # Tab 1: Eyes
 def tab_eyes(df):
+    # Gaze 2D/3D
     fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
                              y=df['ET_Gaze3DY'],
                              z=df['ET_Gaze3DZ'],
                              title='Gaze X, Y and Z',
                              size_max=10,
                              opacity=0.5)
+                    
+    fig_2dgazeinter = px.scatter(df,
+                            x='Interpolated Gaze X',
+                            y='Interpolated Gaze Y',
+                            title='Interpolated Gaze')
 
+    # Pupil diameter
     fig_pupilscat = px.scatter(df,
                         x='ET_PupilLeft',
                         y='ET_PupilRight',
@@ -50,82 +81,71 @@ def tab_eyes(df):
                             "ET_PupilLeft": "Pupil left (mm)",
                             "ET_PupilRight": "Pupil right (mm)"})
     
-    fig_pupilsbar = px.bar(df,
-                        x='ET_PupilLeft',
-                        title='Pupil size',
-                        labels={
-                            "ET_PupilLeft": "Pupil left (mm)",})
-                    
-    fig_2dgazeinter = px.scatter(df,
-                            x='Interpolated Gaze X',
-                            y='Interpolated Gaze Y',
-                            title='Interpolated Gaze')
-
-    #set a local image as a background
-    image_filename = 'assets\img\Viewport_Panorama-1.jpg'
-    bgimg = base64.b64encode(open(image_filename, 'rb').read())
-
-    fig_2dgazeinter.update_layout(
-                images= [dict(
-                    source='data:image/png;base64,{}'.format(bgimg.decode()),
-                    xref="paper", yref="paper",
-                    sizing='stretch',
-                    opacity=1,
-                    x=0, y=1,
-                    sizex=1, sizey=1,
-                    xanchor="left",
-                    yanchor="top",
-                    #sizing="stretch",
-                    layer="below")])
-
-    fig_gazevelacc = px.scatter(df,
-                            x='Gaze Velocity',
-                            y='Gaze Acceleration',
-                            title='Gaze Velocity and Acceleration')
-
-    fig_fixationxy = px.scatter(df,
-                            x='Fixation X',
-                            y='Fixation Y',
-                            title='Fixation X and Y')
-
-    fig_fixationstartend = px.scatter(df,
-                            x='Fixation Start',
-                            y='Fixation End',
-                            title='Fixation Start and End')
-
-    fig_velacc = px.scatter(df,
-                            x='Saccade Peak Velocity',
-                            y='Saccade Peak Acceleration',
-                            title='Peak Velocity & Peak Acceleration')
-
-    fig_accdel = px.scatter(df,
-                            x='Saccade Peak Deceleration',
-                            y='Saccade Peak Acceleration',
-                            title='Peak Deceleration & Peak Acceleration')
-
-    fig_durdir = px.scatter(df,
-                            x='Saccade Direction',
-                            y='Saccade Duration',
-                            title='Duration & Direction')
-                    
-    fig_ampvel = px.scatter(df,
-                            x='Saccade Amplitude',
-                            y='Saccade Peak Velocity',
-                            title='Amplitude & Peak Velocity')
-
+    # Blink
     fig_blink = px.histogram(df,
                         x='Blink detected (binary)',
                         title='Detected blinks',
                         nbins=2)
+    
+    # Fixation
+    fig_fixationxy = px.scatter(df[df['Fixation X'].notna()],
+                            x='Fixation X',
+                            y='Fixation Y',
+                            color='Fixation Dispersion',
+                            size='Fixation Duration',
+                            opacity=.2,
+                            title='Fixation coordinates, dispersion and duration')
+
+    # Saccade
+    #...
+
+    # fig_pupilsbar = px.bar(df,
+    #                     x='ET_PupilLeft',
+    #                     title='Pupil size',
+    #                     labels={
+    #                         "ET_PupilLeft": "Pupil left (mm)",})
+
+    # fig_gazevelacc = px.scatter(df,
+    #                         x='Gaze Velocity',
+    #                         y='Gaze Acceleration',
+    #                         title='Gaze Velocity and Acceleration')
+
+
+
+    # fig_fixationstartend = px.scatter(df,
+    #                         x='Fixation Start',
+    #                         y='Fixation End',
+    #                         title='Fixation Start and End')
+
+    # fig_velacc = px.scatter(df,
+    #                         x='Saccade Peak Velocity',
+    #                         y='Saccade Peak Acceleration',
+    #                         title='Peak Velocity & Peak Acceleration')
+
+    # fig_accdel = px.scatter(df,
+    #                         x='Saccade Peak Deceleration',
+    #                         y='Saccade Peak Acceleration',
+    #                         title='Peak Deceleration & Peak Acceleration')
+
+    # fig_durdir = px.scatter(df,
+    #                         x='Saccade Direction',
+    #                         y='Saccade Duration',
+    #                         title='Duration & Direction')
+                    
+    # fig_ampvel = px.scatter(df,
+    #                         x='Saccade Amplitude',
+    #                         y='Saccade Peak Velocity',
+    #                         title='Amplitude & Peak Velocity')
+
 
 
     # the layout
     tab_layout = [
-        html.Section(
+        html.Section(           # Section: Gaze points
             className='mt-5',
             children=
             [
-                html.H4('Header'),
+                html.H4('Gaze points'),
                 html.P(f'Information'),
                 dbc.Row(
                     children=
@@ -146,6 +166,15 @@ def tab_eyes(df):
                         ),
                     ]
                 ),
+            ]
+        ),
+
+        html.Section(           # Section: blink/pupil
+            className='mt-5',
+            children=
+            [
+                html.H4('Pupil diameter & blinks'),
+                html.P(f'Information'),
                 dbc.Row(
                     children=
                     [
@@ -165,92 +194,57 @@ def tab_eyes(df):
                         ),
                     ]
                 ),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_fixationxy)
-        #                     ]
-        #                 ),
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_fixationstartend)
-        #                     ]
-        #                 ),
-        #             ]
-        #         ),
-
-        #     ]
-        # ),
-        # html.Section(
-        #     className='mt-5',
-        #     children=
-        #     [
-        #         html.H4('Saccade'),
-        #         html.P(f"""- Duration (hoe lang duurt de beweging van het oog tussen de fixation points)
-        #             - Amplitude (hoekafstand die de ogen van het beginpunt naar het eindpunt hebben afgelegd)
-        #             - Peak velocity (de maximale snelheid van de ogen tijdens deze saccade)
-        #             - Peak acceleration (de maximale snelheidstoename van de ogen tijdens deze saccade)
-        #             - Peak deceleration (maximale afname van de snelheid van de ogen tijdens deze saccade)
-        #             - Direction (richting van de saccade van het beginpunt naar het eindpunt, aangegeven als hoeken tegen de klok in: 0 graden betekent een horizontale saccade van links naar rechts, 90 graden een verticale saccade van onder naar boven)
-        #         """),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_velacc)
-        #                     ]
-        #                 ),
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_accdel)
-        #                     ]
-        #                 ),
-        #             ]
-        #         ),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_durdir)
-        #                     ]
-        #                 ),
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_ampvel)
-        #                     ]
-        #                 ),
-        #             ]
-        #         ),
-        #         dbc.Row(
-        #             children=
-        #             [
-        #                 dbc.Col(
-        #                     width=6,
-        #                     children=
-        #                     [
-        #                         dcc.Graph(figure=fig_blink)
-        #                     ]
-        #                 ),
-        #             ]
-        #         ),
             ]
         ),
+
+        html.Section(           # Section: Fixations
+            className='mt-5',
+            children=
+            [
+                html.H4('Fixations'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_fixationxy)
+                            ]
+                        ),
+                        # dbc.Col(
+                        #     width=6,
+                        #     children=
+                        #     [
+                        #         dcc.Graph(figure=fig_fixationstartend)
+                        #     ]
+                        # ),
+                    ]
+                ),
+            ]
+        ),
+
+        html.Section(           # Section: Saccade
+            className='mt-5',
+            children=
+            [
+                html.H4('Saccade'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_fixationxy)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        )
     ]
     return tab_layout
 
@@ -458,41 +452,41 @@ def tab_quality(df):
                 y='ET_ValidityRightEye',
                 title='Eye Validity')
 
-    fig_xbar = px.bar(df,
-                x='ET_GazeDirectionLeftX',
-                y='ET_GazeDirectionRightX')
+    # fig_xbar = px.bar(df,
+    #             x='ET_GazeDirectionLeftX',
+    #             y='ET_GazeDirectionRightX')
 
-    fig_xcolumn = px.line(df,
-                x='ET_GazeDirectionLeftX',
-                y='ET_GazeDirectionRightX')
+    # fig_xcolumn = px.line(df,
+    #             x='ET_GazeDirectionLeftX',
+    #             y='ET_GazeDirectionRightX')
 
-    fig_xline = px.line(df,
-                x='ET_GazeDirectionLeftX',
-                y='ET_GazeDirectionRightX')
+    # fig_xline = px.line(df,
+    #             x='ET_GazeDirectionLeftX',
+    #             y='ET_GazeDirectionRightX')
 
-    fig_ybar = px.bar(df,
-                x='ET_GazeDirectionLeftY',
-                y='ET_GazeDirectionRightY')
+    # fig_ybar = px.bar(df,
+    #             x='ET_GazeDirectionLeftY',
+    #             y='ET_GazeDirectionRightY')
 
-    fig_ycolumn = px.line(df,
-                x='ET_GazeDirectionLeftY',
-                y='ET_GazeDirectionRightY')
+    # fig_ycolumn = px.line(df,
+    #             x='ET_GazeDirectionLeftY',
+    #             y='ET_GazeDirectionRightY')
 
-    fig_yline = px.line(df,
-                x='ET_GazeDirectionLeftY',
-                y='ET_GazeDirectionRightY')
+    # fig_yline = px.line(df,
+    #             x='ET_GazeDirectionLeftY',
+    #             y='ET_GazeDirectionRightY')
 
-    fig_zbar = px.bar(df,
-                x='ET_GazeDirectionLeftZ',
-                y='ET_GazeDirectionRightZ')
+    # fig_zbar = px.bar(df,
+    #             x='ET_GazeDirectionLeftZ',
+    #             y='ET_GazeDirectionRightZ')
 
-    fig_zcolumn = px.line(df,
-                x='ET_GazeDirectionLeftZ',
-                y='ET_GazeDirectionRightZ')
+    # fig_zcolumn = px.line(df,
+    #             x='ET_GazeDirectionLeftZ',
+    #             y='ET_GazeDirectionRightZ')
 
-    fig_zline = px.line(df,
-                x='ET_GazeDirectionLeftZ',
-                y='ET_GazeDirectionRightZ')
+    # fig_zline = px.line(df,
+    #             x='ET_GazeDirectionLeftZ',
+    #             y='ET_GazeDirectionRightZ')
 
     tab_layout = [
         html.Section(
@@ -540,94 +534,6 @@ def tab_quality(df):
                     ]
                 ),
             ]
-        ),
-        html.Section(
-            className='mt-5',
-            children=
-            [
-                html.H4('Direction'),
-                html.P(f'Information'),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_xbar)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_xcolumn)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_xline)
-                            ]
-                        ),
-
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_ybar)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_ycolumn)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_yline)
-                            ]
-                        ),
-
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_zbar)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_zcolumn)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_zline)
-                            ]
-                        ),
-                    ]
-                ),
-            ]
-        ),
+        )
     ]
     return tab_layout
