@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.express as px
+import plotly.graph_objects as go
 import base64
 
 from app import app
@@ -23,6 +24,7 @@ from app import app
 def layout_fullroute(df):
     # global dff 
     # dff = df.copy()
+    df = df.sort_values('Timestamp')
 
     layout = html.Div([
         dcc.Tabs(
@@ -36,7 +38,7 @@ def layout_fullroute(df):
                 dcc.Tab(label='Head movement', value='tab-movement', children=tab_movement(df)),
                 dcc.Tab(label='Data quality', value='tab-quality', children=tab_quality(df)),
         ]),
-        html.Div(id='tabs-content')
+        # html.Div(id='tabs-content')
     ])
     return layout
 
@@ -63,14 +65,15 @@ def tab_eyes(df):
     fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
                              y=df['ET_Gaze3DY'],
                              z=df['ET_Gaze3DZ'],
-                             title='Gaze X, Y and Z',
+                             title='Gaze 3D',
                              size_max=10,
-                             opacity=0.5)
+                             opacity=0.2)
                     
     fig_2dgazeinter = px.scatter(df,
                             x='Interpolated Gaze X',
                             y='Interpolated Gaze Y',
-                            title='Interpolated Gaze')
+                            opacity=0.2,
+                            title='Interpolated Gaze 2D')
 
     # Pupil diameter
     fig_pupilscat = px.scatter(df,
@@ -93,51 +96,11 @@ def tab_eyes(df):
                             y='Fixation Y',
                             color='Fixation Dispersion',
                             size='Fixation Duration',
-                            opacity=.2,
+                            opacity=.3,
                             title='Fixation coordinates, dispersion and duration')
 
     # Saccade
-    #...
-
-    # fig_pupilsbar = px.bar(df,
-    #                     x='ET_PupilLeft',
-    #                     title='Pupil size',
-    #                     labels={
-    #                         "ET_PupilLeft": "Pupil left (mm)",})
-
-    # fig_gazevelacc = px.scatter(df,
-    #                         x='Gaze Velocity',
-    #                         y='Gaze Acceleration',
-    #                         title='Gaze Velocity and Acceleration')
-
-
-
-    # fig_fixationstartend = px.scatter(df,
-    #                         x='Fixation Start',
-    #                         y='Fixation End',
-    #                         title='Fixation Start and End')
-
-    # fig_velacc = px.scatter(df,
-    #                         x='Saccade Peak Velocity',
-    #                         y='Saccade Peak Acceleration',
-    #                         title='Peak Velocity & Peak Acceleration')
-
-    # fig_accdel = px.scatter(df,
-    #                         x='Saccade Peak Deceleration',
-    #                         y='Saccade Peak Acceleration',
-    #                         title='Peak Deceleration & Peak Acceleration')
-
-    # fig_durdir = px.scatter(df,
-    #                         x='Saccade Direction',
-    #                         y='Saccade Duration',
-    #                         title='Duration & Direction')
-                    
-    # fig_ampvel = px.scatter(df,
-    #                         x='Saccade Amplitude',
-    #                         y='Saccade Peak Velocity',
-    #                         title='Amplitude & Peak Velocity')
-
-
+    # ...
 
     # the layout
     tab_layout = [
@@ -154,14 +117,14 @@ def tab_eyes(df):
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_3dgaze)
+                                dcc.Graph(figure=fig_2dgazeinter)
                             ]
                         ),
                         dbc.Col(
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_2dgazeinter)
+                                dcc.Graph(figure=fig_3dgaze)
                             ]
                         ),
                     ]
@@ -213,13 +176,7 @@ def tab_eyes(df):
                                 dcc.Graph(figure=fig_fixationxy)
                             ]
                         ),
-                        # dbc.Col(
-                        #     width=6,
-                        #     children=
-                        #     [
-                        #         dcc.Graph(figure=fig_fixationstartend)
-                        #     ]
-                        # ),
+                        # Add fixation plots...
                     ]
                 ),
             ]
@@ -234,11 +191,13 @@ def tab_eyes(df):
                 dbc.Row(
                     children=
                     [
+                        # Add sacade plots...
                         dbc.Col(
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_fixationxy)
+                                # dcc.Graph(figure=fig_fixationxy)
+                                html.P('Saccade graphs.')
                             ]
                         ),
                     ]
@@ -250,33 +209,71 @@ def tab_eyes(df):
 
 # Tab 2: GSR
 def tab_gsr(df):
-    fig_tonic = px.line(df,
-                y='Tonic signal (microSiemens)')
+    # fig_tonic = px.line(df,
+    #             y='Tonic signal (microSiemens)')
     
-    fig_phasic = px.line(df,
-                y='Phasic signal (microSiemens)')
+    # fig_phasic = px.line(df,
+    #             y='Phasic signal (microSiemens)')
 
-    fig_gsrraw = px.line(df,
-                y='GSR RAW')
+    # fig_gsrraw = px.line(df,
+    #             y='GSR RAW')
 
-    fig_gsrinter = px.line(df,
-                y='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)')
+    # fig_gsrinter = px.line(df,
+    #             y='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)')
 
-    fig_intertonic = px.scatter(df,
-                x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
-                y='Tonic signal (microSiemens)')
+    # fig_intertonic = px.scatter(df,
+    #             x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
+    #             y='Tonic signal (microSiemens)')
 
-    fig_interphasic = px.scatter(df,
-                x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
-                y='Phasic signal (microSiemens)')
+    # fig_interphasic = px.scatter(df,
+    #             x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
+    #             y='Phasic signal (microSiemens)')
 
+    # GSR Raw
+    fig_gsrraw = px.line(df.sort_values('Timestamp'),
+                         y='GSR RAW',
+                         x='Timestamp',
+                         title='GSR over time'
+                         )
+
+    # Tonic signal
+    fig_tonic = px.line(df.sort_values('Timestamp'),
+                         y='Tonic signal (microSiemens)',
+                         x='Timestamp',
+                         title='Tonic signal over time'
+                         )
+    # Phasic signal
+    fig_phasic = px.line(df.sort_values('Timestamp'),
+                         y='Phasic signal (microSiemens)',
+                         x='Timestamp',
+                         title='Phasic signal over time'
+                         )
 
     tab_layout = [
         html.Section(
             className='mt-5',
             children=
             [
-                html.H4('Header'),
+                html.H4('GSR Raw'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_gsrraw)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+        html.Section(
+            children=
+            [
+                html.H4('Tonic & Phasic signal'),
                 html.P(f'Information'),
                 dbc.Row(
                     children=
@@ -296,69 +293,49 @@ def tab_gsr(df):
                             ]
                         ),
                     ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gsrraw)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gsrinter)
-                            ]
-                        ),
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_intertonic)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_interphasic)
-                            ]
-                        ),
-                    ]
-                ),
+                )
             ]
-        ),
+        )
     ]
+
     return tab_layout
 
 # Tab 3: Movement
 def tab_movement(df):
-    fig_gyrx = px.line(df,
-                y='ET_GyroX')
+    fig_gyrx = px.scatter(df,
+                y='ET_GyroX',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
 
-    fig_gyry = px.line(df,
-                y='ET_GyroY')
+    fig_gyry = px.scatter(df,
+                y='ET_GyroY',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+                
 
-    fig_gyrz = px.line(df,
-                y='ET_GyroZ')
+    fig_gyrz = px.scatter(df,
+                y='ET_GyroZ',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
 
-    fig_accx = px.line(df,
-                y='ET_AccX')
 
-    fig_accy = px.line(df,
-                y='ET_AccY')
+    fig_accx = px.scatter(df,
+                y='ET_AccX',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
 
-    fig_accz = px.line(df,
-                y='ET_AccZ')
+
+    fig_accy = px.scatter(df,
+                y='ET_AccY',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+
+    fig_accz = px.scatter(df,
+                y='ET_AccZ',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
 
 
 
@@ -429,64 +406,32 @@ def tab_movement(df):
 
 # Tab 4: Data quality
 def tab_quality(df):
-
-    fig_eye3d = px.scatter_3d(df,
-                x='ET_DistanceLeft',
-                y='ET_DistanceRight',
-                z='ET_Distance3D')
-
-    fig_int = px.line(df,
-                y='Interpolated Distance',
-                title='Interpolated Distance')
+    fig_int = px.scatter(df,
+                        y='ET_DistanceLeft',
+                        x='Timestamp',
+                        opacity=0.3,
+                        title='Distance')
 
     fig_pupilscat = px.scatter(df,
-                        x='ET_PupilLeft',
-                        y='ET_PupilRight',
-                        title='Pupil size',
-                        labels={
-                            "ET_PupilLeft": "Pupil left (mm)",
-                            "ET_PupilRight": "Pupil right (mm)"})
+                                x='Timestamp',
+                                y='ET_PupilLeft',
+                                title='Pupil size',
+                                opacity=0.3,
+                                # labels={
+                                #     "ET_PupilLeft": "Pupil left (mm)",
+                                #     "ET_PupilRight": "Pupil right (mm)"}
+                                )
 
-    fig_val = px.line(df,
-                x='ET_ValidityLeftEye',
-                y='ET_ValidityRightEye',
-                title='Eye Validity')
+    fig_val = px.scatter(df,
+                        x='Timestamp',
+                        y='ET_ValidityLeftEye',
+                        opacity=0.3,
+                        title='Eye Validity (left)')
 
-    # fig_xbar = px.bar(df,
-    #             x='ET_GazeDirectionLeftX',
-    #             y='ET_GazeDirectionRightX')
-
-    # fig_xcolumn = px.line(df,
-    #             x='ET_GazeDirectionLeftX',
-    #             y='ET_GazeDirectionRightX')
-
-    # fig_xline = px.line(df,
-    #             x='ET_GazeDirectionLeftX',
-    #             y='ET_GazeDirectionRightX')
-
-    # fig_ybar = px.bar(df,
-    #             x='ET_GazeDirectionLeftY',
-    #             y='ET_GazeDirectionRightY')
-
-    # fig_ycolumn = px.line(df,
-    #             x='ET_GazeDirectionLeftY',
-    #             y='ET_GazeDirectionRightY')
-
-    # fig_yline = px.line(df,
-    #             x='ET_GazeDirectionLeftY',
-    #             y='ET_GazeDirectionRightY')
-
-    # fig_zbar = px.bar(df,
-    #             x='ET_GazeDirectionLeftZ',
-    #             y='ET_GazeDirectionRightZ')
-
-    # fig_zcolumn = px.line(df,
-    #             x='ET_GazeDirectionLeftZ',
-    #             y='ET_GazeDirectionRightZ')
-
-    # fig_zline = px.line(df,
-    #             x='ET_GazeDirectionLeftZ',
-    #             y='ET_GazeDirectionRightZ')
+    # fig_eye3d = px.scatter_3d(df,
+    #             x='ET_DistanceLeft',
+    #             y='ET_DistanceRight',
+    #             z='ET_Distance3D')
 
     tab_layout = [
         html.Section(
@@ -499,14 +444,7 @@ def tab_quality(df):
                     children=
                     [
                         dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_eye3d)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=6,
+                            width=12,
                             children=
                             [
                                 dcc.Graph(figure=fig_int)
