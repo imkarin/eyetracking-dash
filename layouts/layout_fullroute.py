@@ -141,28 +141,9 @@ def tab_eyes(df):
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_pupilscat)
-                            ]
-                        ),
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
                                 dcc.Graph(figure=fig_2dgazeinter)
                             ]
                         ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gazevelacc)
-                            ]
-                        ),
                     ]
                 ),
                 dbc.Row(
@@ -172,74 +153,9 @@ def tab_eyes(df):
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_fixationxy)
+                                dcc.Graph(figure=fig_pupilscat)
                             ]
                         ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_fixationstartend)
-                            ]
-                        ),
-                    ]
-                ),
-
-            ]
-        ),
-        html.Section(
-            className='mt-5',
-            children=
-            [
-                html.H4('Saccade'),
-                html.P(f"""- Duration (hoe lang duurt de beweging van het oog tussen de fixation points)
-                    - Amplitude (hoekafstand die de ogen van het beginpunt naar het eindpunt hebben afgelegd)
-                    - Peak velocity (de maximale snelheid van de ogen tijdens deze saccade)
-                    - Peak acceleration (de maximale snelheidstoename van de ogen tijdens deze saccade)
-                    - Peak deceleration (maximale afname van de snelheid van de ogen tijdens deze saccade)
-                    - Direction (richting van de saccade van het beginpunt naar het eindpunt, aangegeven als hoeken tegen de klok in: 0 graden betekent een horizontale saccade van links naar rechts, 90 graden een verticale saccade van onder naar boven)
-                """),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_velacc)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_accdel)
-                            ]
-                        ),
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_durdir)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_ampvel)
-                            ]
-                        ),
-                    ]
-                ),
-                dbc.Row(
-                    children=
-                    [
                         dbc.Col(
                             width=6,
                             children=
@@ -249,6 +165,90 @@ def tab_eyes(df):
                         ),
                     ]
                 ),
+        #         dbc.Row(
+        #             children=
+        #             [
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_fixationxy)
+        #                     ]
+        #                 ),
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_fixationstartend)
+        #                     ]
+        #                 ),
+        #             ]
+        #         ),
+
+        #     ]
+        # ),
+        # html.Section(
+        #     className='mt-5',
+        #     children=
+        #     [
+        #         html.H4('Saccade'),
+        #         html.P(f"""- Duration (hoe lang duurt de beweging van het oog tussen de fixation points)
+        #             - Amplitude (hoekafstand die de ogen van het beginpunt naar het eindpunt hebben afgelegd)
+        #             - Peak velocity (de maximale snelheid van de ogen tijdens deze saccade)
+        #             - Peak acceleration (de maximale snelheidstoename van de ogen tijdens deze saccade)
+        #             - Peak deceleration (maximale afname van de snelheid van de ogen tijdens deze saccade)
+        #             - Direction (richting van de saccade van het beginpunt naar het eindpunt, aangegeven als hoeken tegen de klok in: 0 graden betekent een horizontale saccade van links naar rechts, 90 graden een verticale saccade van onder naar boven)
+        #         """),
+        #         dbc.Row(
+        #             children=
+        #             [
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_velacc)
+        #                     ]
+        #                 ),
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_accdel)
+        #                     ]
+        #                 ),
+        #             ]
+        #         ),
+        #         dbc.Row(
+        #             children=
+        #             [
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_durdir)
+        #                     ]
+        #                 ),
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_ampvel)
+        #                     ]
+        #                 ),
+        #             ]
+        #         ),
+        #         dbc.Row(
+        #             children=
+        #             [
+        #                 dbc.Col(
+        #                     width=6,
+        #                     children=
+        #                     [
+        #                         dcc.Graph(figure=fig_blink)
+        #                     ]
+        #                 ),
+        #             ]
+        #         ),
             ]
         ),
     ]
