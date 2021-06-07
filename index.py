@@ -21,7 +21,8 @@ import layouts.layout_sources
 
 # Load in the data (smaller version for development)
 print('Loading df...')
-df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
+df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+# df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
 
 # Df preparation
 df = df.reset_index(drop=True)
@@ -63,6 +64,17 @@ app.layout = html.Div(
 def render_page_content(pathname, data):
     # Apply the new filters (new DF)
     dff = df.copy()
+    if pathname == '/viewpoint-1':
+        dff = dff[dff['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 'Viewpoint_1']
+    elif pathname == '/viewpoint-2':
+        dff = dff[dff['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 'Viewpoint_2']
+    elif pathname == '/viewpoint-3':
+        dff = dff[dff['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 'Viewpoint_3']
+    elif pathname == '/viewpoint-4':
+        dff = dff[dff['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 'Viewpoint_4']
+    elif pathname == '/viewpoint-5':
+        dff = dff[dff['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 'Viewpoint_5']
+
     gender_filter = (dff['Resp gender'].isin(data['gender']))
     age_filter = (dff['Resp age'].isin(data['age']))
     timebegin = pd.to_datetime(data['time'][0], errors='coerce')
@@ -91,7 +103,7 @@ def render_page_content(pathname, data):
         return layout_fullroute(dff), 'Data full route', ''
     
     # Page: Data per viewpoint
-    elif pathname in ["/per-viewpoint-1", "/per-viewpoint-2"]:
+    elif pathname in ["/viewpoint-1", "/viewpoint-2", "/viewpoint-3", "/viewpoint-4", "/viewpoint-5"]:
         return layout_perviewpoint(dff, pathname), 'Data per viewpoint', 'show'
 
     # Page: Sources

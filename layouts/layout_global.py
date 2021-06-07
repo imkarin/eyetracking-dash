@@ -25,10 +25,16 @@ sidebar = html.Aside(
                     direction='right',
                     children=[
                         dbc.DropdownMenuItem(
-                            dbc.NavLink("Viewpoint 1", href="per-viewpoint-1", active="exact")), 
+                            dbc.NavLink("Viewpoint 1", href="viewpoint-1", active="exact")), 
                         dbc.DropdownMenuItem(
-                            dbc.NavLink("Viewpoint 2", href="per-viewpoint-2", active="exact")
-                        )],
+                            dbc.NavLink("Viewpoint 2", href="viewpoint-2", active="exact")),
+                        dbc.DropdownMenuItem(
+                            dbc.NavLink("Viewpoint 3", href="viewpoint-3", active="exact")),
+                        dbc.DropdownMenuItem(
+                            dbc.NavLink("Viewpoint 4", href="viewpoint-4", active="exact")), 
+                        dbc.DropdownMenuItem(
+                            dbc.NavLink("Viewpoint 5", href="viewpoint-5", active="exact")),
+                        ],
                     ),
                 dbc.NavLink("Sources", href="/sources", active="exact", disabled=True)
             ],
