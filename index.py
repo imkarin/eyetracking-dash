@@ -19,6 +19,8 @@ from layouts.layout_fullroute import layout_fullroute
 from layouts.layout_perviewpoint import layout_perviewpoint
 import layouts.layout_sources
 
+import base64
+
 # Load in the data (smaller version for development)
 print('Loading df...')
 df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
@@ -66,14 +68,29 @@ def render_page_content(pathname, data):
     dff = df.copy()
     if pathname == '/viewpoint-1':
         dff = dff[dff['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 'Viewpoint_1']
+
+        image_filename = 'assets\img\Viewport_Panorama-1.jpg'
+        bgimg = base64.b64encode(open(image_filename, 'rb').read())
     elif pathname == '/viewpoint-2':
         dff = dff[dff['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 'Viewpoint_2']
+
+        image_filename = 'assets\img\Viewport_Panorama-2.jpg'
+        bgimg = base64.b64encode(open(image_filename, 'rb').read())
     elif pathname == '/viewpoint-3':
         dff = dff[dff['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 'Viewpoint_3']
+
+        image_filename = 'assets\img\Viewport_Panorama-3.jpg'
+        bgimg = base64.b64encode(open(image_filename, 'rb').read())
     elif pathname == '/viewpoint-4':
         dff = dff[dff['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 'Viewpoint_4']
+
+        image_filename = 'assets\img\Viewport_Panorama-4.jpg'
+        bgimg = base64.b64encode(open(image_filename, 'rb').read())
     elif pathname == '/viewpoint-5':
         dff = dff[dff['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 'Viewpoint_5']
+
+        image_filename = 'assets\img\Viewport_Panorama-5.jpg'
+        bgimg = base64.b64encode(open(image_filename, 'rb').read())
 
     gender_filter = (dff['Resp gender'].isin(data['gender']))
     age_filter = (dff['Resp age'].isin(data['age']))
@@ -104,7 +121,7 @@ def render_page_content(pathname, data):
     
     # Page: Data per viewpoint
     elif pathname in ["/viewpoint-1", "/viewpoint-2", "/viewpoint-3", "/viewpoint-4", "/viewpoint-5"]:
-        return layout_perviewpoint(dff, pathname), 'Data per viewpoint', 'show'
+        return layout_perviewpoint(dff, pathname, bgimg), 'Data per viewpoint', 'show'
 
     # Page: Sources
     elif pathname == "/sources":
