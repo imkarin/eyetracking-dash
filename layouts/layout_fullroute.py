@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.express as px
+import base64
 
 from app import app
 
@@ -59,6 +60,23 @@ def tab_eyes(df):
                             x='Interpolated Gaze X',
                             y='Interpolated Gaze Y',
                             title='Interpolated Gaze')
+
+    #set a local image as a background
+    image_filename = 'assets\img\Viewport_Panorama-1.jpg'
+    plotly_logo = base64.b64encode(open(image_filename, 'rb').read())
+
+    fig_2dgazeinter.update_layout(
+                images= [dict(
+                    source='data:image/png;base64,{}'.format(plotly_logo.decode()),
+                    xref="paper", yref="paper",
+                    sizing='stretch',
+                    opacity=1,
+                    x=0, y=1,
+                    sizex=1, sizey=1,
+                    xanchor="left",
+                    yanchor="top",
+                    #sizing="stretch",
+                    layer="below")])
 
     fig_gazevelacc = px.scatter(df,
                             x='Gaze Velocity',
