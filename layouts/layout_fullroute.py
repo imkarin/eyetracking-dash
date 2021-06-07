@@ -80,6 +80,7 @@ def tab_eyes(df):
                         x='ET_PupilLeft',
                         y='ET_PupilRight',
                         title='Pupil size',
+                        opacity=.1,
                         labels={
                             "ET_PupilLeft": "Pupil left (mm)",
                             "ET_PupilRight": "Pupil right (mm)"})

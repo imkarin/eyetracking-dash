@@ -23,13 +23,13 @@ import base64
 
 # Load in the data (smaller version for development)
 print('Loading df...')
-# df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
-df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
+df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=False, index_col='Unnamed: 0')
+# df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
+
 
 # Df preparation
 df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
-
 
 # Content section (plots go here)
 content = html.Section(id='page-content')
@@ -92,23 +92,15 @@ def render_page_content(pathname, data):
         image_filename = 'assets\img\Viewport_Panorama-5.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
 
-# Old filters:
-    # gender_filter = (dff['Resp gender'].isin(data['gender']))
-    # age_filter = (dff['Resp age'].isin(data['age']))
-    # timebegin = pd.to_datetime(data['time'][0], errors='coerce')
-    # timeend = pd.to_datetime(data['time'][1], errors='coerce')
-    
-    # if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
-    #     time_filter = True
-    # else:
-    #     time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
-    #                 & (dff['Resp rec datetime'].dt.time <= timeend.time()))
-
     # Respondent filters:
     name_filter = (dff['Resp name'] == data['respname'])
 
     dff = dff[name_filter]
         # gender_filter & age_filter & time_filter]
+
+    print(df[df['Resp name'] == 'Anonymous 18-11-20 14h39m'].shape)
+    print(df['Resp name'].unique())
+
 
     # If filters don't match anything, don't update
     if (len(dff) == 0):
