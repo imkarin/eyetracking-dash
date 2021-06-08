@@ -40,12 +40,13 @@ def tab_eyes(df, bgimg):
                              z=df['ET_Gaze3DZ'],
                              title='Gaze X, Y and Z',
                              size_max=10,
-                             opacity=0.5)
+                             opacity=0.4)
 
     fig_2dgazeinter = px.scatter(df,
                             x='Interpolated Gaze X',
                             y='Interpolated Gaze Y',
-                            title='Interpolated Gaze')
+                            title='Interpolated Gaze',
+                            opacity=0.4)
 
     fig_2dgazeinter.update_layout(
                 images= [dict(
@@ -64,6 +65,7 @@ def tab_eyes(df, bgimg):
                         x='ET_PupilLeft',
                         y='ET_PupilRight',
                         title='Pupil size',
+                        opacity=0.4,
                         labels={
                             "ET_PupilLeft": "Pupil left (mm)",
                             "ET_PupilRight": "Pupil right (mm)"})
@@ -76,11 +78,11 @@ def tab_eyes(df, bgimg):
 
     # the layout
     tab_layout = [
-        html.Section(
+        html.Section(       # Section: Gaze
             className='mt-5',
             children=
             [
-                html.H4('Header'),
+                html.H4('Gaze points'),
                 html.P(f'Information'),
                 dbc.Row(
                     children=
@@ -101,6 +103,14 @@ def tab_eyes(df, bgimg):
                         ),
                     ]
                 ),
+            ]
+        ),
+        html.Section(           # Section: Pupil & blink
+            className='mt-5',
+            children=
+            [
+                html.H4('Pupil diameter & blinks'),
+                html.P('Information'),
                 dbc.Row(
                     children=
                     [
