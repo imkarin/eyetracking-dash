@@ -35,6 +35,7 @@ def layout_perviewpoint(df, pathname, bgimg):
 
 # Tab 1: Eyes
 def tab_eyes(df, bgimg):
+    # 3D Gaze
     fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
                              y=df['ET_Gaze3DY'],
                              z=df['ET_Gaze3DZ'],
@@ -42,11 +43,14 @@ def tab_eyes(df, bgimg):
                              size_max=10,
                              opacity=0.4)
 
+    # 2D Gaze
     fig_2dgazeinter = px.scatter(df,
-                            x='Interpolated Gaze X',
-                            y='Interpolated Gaze Y',
-                            title='Interpolated Gaze',
-                            opacity=0.4)
+                            x='Gaze X',
+                            y='Gaze Y',
+                            title='Gaze (average of left and right eye)',
+                            opacity=0.4,
+                            )\
+                            .update_traces(marker={'color':'yellow', 'size': 10})
 
     fig_2dgazeinter.update_layout(
                 images= [dict(
@@ -61,19 +65,33 @@ def tab_eyes(df, bgimg):
                     #sizing="stretch",
                     layer="below")])
 
+    # Pupil diameter
     fig_pupilscat = px.scatter(df,
                         x='ET_PupilLeft',
                         y='ET_PupilRight',
                         title='Pupil size',
-                        opacity=0.4,
+                        opacity=.1,
                         labels={
                             "ET_PupilLeft": "Pupil left (mm)",
                             "ET_PupilRight": "Pupil right (mm)"})
-
+    
+    # Blink
     fig_blink = px.histogram(df,
                         x='Blink detected (binary)',
                         title='Detected blinks',
                         nbins=2)
+    
+    # Fixation
+    fig_fixationxy = px.scatter(df[df['Fixation X'].notna()],
+                            x='Fixation X',
+                            y='Fixation Y',
+                            color='Fixation Dispersion',
+                            size='Fixation Duration',
+                            opacity=.3,
+                            title='Fixation coordinates, dispersion and duration')
+
+    # Saccade
+    # ...
 
 
     # the layout
@@ -132,26 +150,346 @@ def tab_eyes(df, bgimg):
                 ),
             ]
         ),
+
+        
+        html.Section(           # Section: Fixations
+            className='mt-5',
+            children=
+            [
+                html.H4('Fixations'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_fixationxy)
+                            ]
+                        ),
+                        # Add fixation plots...
+                    ]
+                ),
+            ]
+        ),
+
+        html.Section(           # Section: Saccade
+            className='mt-5',
+            children=
+            [
+                html.H4('Saccade'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        # Add sacade plots...
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                # dcc.Graph(figure=fig_fixationxy)
+                                html.P('Saccade graphs.')
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        )
     ]
     return tab_layout
 
 # Tab 2: GSR
 def tab_gsr(df):
+    # GSR Raw
+    fig_gsrraw = px.line(df.sort_values('Timestamp'),
+                         y='GSR Raw (microSiemens)',
+                         x='Timestamp',
+                         color='Resp name',
+                         title='GSR over time'
+                         )
+
+    # Tonic signal
+    fig_tonic = px.line(df.sort_values('Timestamp'),
+                         y='Tonic signal (microSiemens)',
+                         x='Timestamp',
+                         color='Resp name',
+                         title='Tonic signal over time'
+                         )
+    # Phasic signal
+    fig_phasic = px.line(df.sort_values('Timestamp'),
+                         y='Phasic signal (microSiemens)',
+                         x='Timestamp',
+                         color='Resp name',
+                         title='Phasic signal over time'
+                         )
+    
+    # Peaks
+    fig_peaks_detect = px.line(df.sort_values('Timestamp'),
+                        y='Peak detected (binary)',
+                        x='Timestamp',
+                        color='Resp name',
+                        title='Peaks detected over time'
+                        )
+
+    fig_peaks_amp = px.line(df.sort_values('Timestamp'),
+                        y='Peak amplitude (microSiemens)',
+                        x='Timestamp',
+                        color='Resp name',
+                        title='Peaks detected over time'
+                        )
+
     tab_layout = [
-        # html elements/plots here
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('GSR Raw'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_gsrraw)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+
+        html.Section(
+            children=
+            [
+                html.H4('Tonic & Phasic signal'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_tonic)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_phasic)
+                            ]
+                        ),
+                    ]
+                )
+            ]
+        ),
+
+        html.Section(
+            children=
+            [
+                html.H4('GSR Peaks'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_peaks_detect)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_peaks_amp)
+                            ]
+                        ),
+                    ]
+                )
+            ]
+        )
     ]
+
     return tab_layout
 
 # Tab 3: Movement
 def tab_movement(df):
+    fig_gyrx = px.scatter(df,
+                y='ET_GyroX',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+    fig_gyry = px.scatter(df,
+                y='ET_GyroY',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+                
+
+    fig_gyrz = px.scatter(df,
+                y='ET_GyroZ',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+
+    fig_accx = px.scatter(df,
+                y='ET_AccX',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+
+    fig_accy = px.scatter(df,
+                y='ET_AccY',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+
+    fig_accz = px.scatter(df,
+                y='ET_AccZ',
+                x='Timestamp',
+                opacity=0.3).update_traces(marker_size=2)
+
+
+
+
     tab_layout = [
-        # html elements/plots here
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Header'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_gyrx)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_gyry)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_gyrz)
+                            ]
+                        )
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_accx)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_accy)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=4,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_accz)
+                            ]
+                        )
+                    ]
+                ),
+            ]
+        ),
+
     ]
     return tab_layout
 
 # Tab 4: Data quality
 def tab_quality(df):
+    fig_int = px.scatter(df,
+                        y='ET_DistanceLeft',
+                        x='Timestamp',
+                        opacity=0.3,
+                        title='Distance')
+
+    fig_pupilscat = px.scatter(df,
+                                x='Timestamp',
+                                y='ET_PupilLeft',
+                                title='Pupil size',
+                                opacity=0.3,
+                                # labels={
+                                #     "ET_PupilLeft": "Pupil left (mm)",
+                                #     "ET_PupilRight": "Pupil right (mm)"}
+                                )
+
+    fig_val = px.scatter(df,
+                        x='Timestamp',
+                        y='ET_ValidityLeftEye',
+                        opacity=0.3,
+                        title='Eye Validity (left)')
+
+    # fig_eye3d = px.scatter_3d(df,
+    #             x='ET_DistanceLeft',
+    #             y='ET_DistanceRight',
+    #             z='ET_Distance3D')
+
     tab_layout = [
-        # html elements/plots here
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Header'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=12,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_int)
+                            ]
+                        ),
+                    ]
+                ),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_pupilscat)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_val)
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        )
     ]
     return tab_layout

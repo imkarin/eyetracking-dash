@@ -70,10 +70,10 @@ def tab_eyes(df):
                              opacity=0.2)
                     
     fig_2dgazeinter = px.scatter(df,
-                            x='Interpolated Gaze X',
-                            y='Interpolated Gaze Y',
+                            x='Gaze X',
+                            y='Gaze Y',
                             opacity=0.2,
-                            title='Interpolated Gaze 2D')
+                            title='Gaze (average of left and right eye)')
 
     # Pupil diameter
     fig_pupilscat = px.scatter(df,
@@ -208,32 +208,14 @@ def tab_eyes(df):
     ]
     return tab_layout
 
+
 # Tab 2: GSR
 def tab_gsr(df):
-    # fig_tonic = px.line(df,
-    #             y='Tonic signal (microSiemens)')
-    
-    # fig_phasic = px.line(df,
-    #             y='Phasic signal (microSiemens)')
-
-    # fig_gsrraw = px.line(df,
-    #             y='GSR RAW')
-
-    # fig_gsrinter = px.line(df,
-    #             y='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)')
-
-    # fig_intertonic = px.scatter(df,
-    #             x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
-    #             y='Tonic signal (microSiemens)')
-
-    # fig_interphasic = px.scatter(df,
-    #             x='GSR Interpolated (microSiemens)(GSRPEAK=IsPeak)(GSRONSET=GsrOnset)(GSROFFSET=GsrOffset)',
-    #             y='Phasic signal (microSiemens)')
-
     # GSR Raw
     fig_gsrraw = px.line(df.sort_values('Timestamp'),
-                         y='GSR RAW',
+                         y='GSR Raw (microSiemens)',
                          x='Timestamp',
+                         color='Resp name',
                          title='GSR over time'
                          )
 
@@ -241,14 +223,31 @@ def tab_gsr(df):
     fig_tonic = px.line(df.sort_values('Timestamp'),
                          y='Tonic signal (microSiemens)',
                          x='Timestamp',
+                         color='Resp name',
                          title='Tonic signal over time'
                          )
     # Phasic signal
     fig_phasic = px.line(df.sort_values('Timestamp'),
                          y='Phasic signal (microSiemens)',
                          x='Timestamp',
+                         color='Resp name',
                          title='Phasic signal over time'
                          )
+    
+    # Peaks
+    fig_peaks_detect = px.line(df.sort_values('Timestamp'),
+                        y='Peak detected (binary)',
+                        x='Timestamp',
+                        color='Resp name',
+                        title='Peaks detected over time'
+                        )
+
+    fig_peaks_amp = px.line(df.sort_values('Timestamp'),
+                        y='Peak amplitude (microSiemens)',
+                        x='Timestamp',
+                        color='Resp name',
+                        title='Peaks detected over time'
+                        )
 
     tab_layout = [
         html.Section(
@@ -271,6 +270,7 @@ def tab_gsr(df):
                 ),
             ]
         ),
+
         html.Section(
             children=
             [
@@ -296,8 +296,36 @@ def tab_gsr(df):
                     ]
                 )
             ]
+        ),
+
+        html.Section(
+            children=
+            [
+                html.H4('GSR Peaks'),
+                html.P(f'Information'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_peaks_detect)
+                            ]
+                        ),
+                        dbc.Col(
+                            width=6,
+                            children=
+                            [
+                                dcc.Graph(figure=fig_peaks_amp)
+                            ]
+                        ),
+                    ]
+                )
+            ]
         )
     ]
+
 
     return tab_layout
 
@@ -418,9 +446,6 @@ def tab_quality(df):
                                 y='ET_PupilLeft',
                                 title='Pupil size',
                                 opacity=0.3,
-                                # labels={
-                                #     "ET_PupilLeft": "Pupil left (mm)",
-                                #     "ET_PupilRight": "Pupil right (mm)"}
                                 )
 
     fig_val = px.scatter(df,
@@ -428,11 +453,6 @@ def tab_quality(df):
                         y='ET_ValidityLeftEye',
                         opacity=0.3,
                         title='Eye Validity (left)')
-
-    # fig_eye3d = px.scatter_3d(df,
-    #             x='ET_DistanceLeft',
-    #             y='ET_DistanceRight',
-    #             z='ET_Distance3D')
 
     tab_layout = [
         html.Section(
