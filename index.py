@@ -69,28 +69,38 @@ def render_page_content(pathname, data):
     if pathname == '/viewpoint-1':
         dff = dff[dff['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]
 
-        image_filename = 'assets\img\Viewport_Panorama-1.jpg'
+        image_filename = 'assets/img/Viewport_Panorama-1.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+        width = 1418
+        height = 566
     elif pathname == '/viewpoint-2':
         dff = dff[dff['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]
 
         image_filename = 'assets\img\Viewport_Panorama-2.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+        width = 1027
+        height = 789
     elif pathname == '/viewpoint-3':
         dff = dff[dff['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]
 
         image_filename = 'assets\img\Viewport_Panorama-3.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+        width = 1274
+        height = 1069
     elif pathname == '/viewpoint-4':
         dff = dff[dff['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]
 
         image_filename = 'assets\img\Viewport_Panorama-4.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+        width = 1368
+        height = 943
     elif pathname == '/viewpoint-5':
         dff = dff[dff['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]
 
         image_filename = 'assets\img\Viewport_Panorama-5.jpg'
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
+        width = 1675
+        height = 679
 
     # Respondent filters:
     name_filter = (dff['Resp name'] == data['respname'])
@@ -119,7 +129,7 @@ def render_page_content(pathname, data):
     
     # Page: Data per viewpoint
     elif pathname in ["/viewpoint-1", "/viewpoint-2", "/viewpoint-3", "/viewpoint-4", "/viewpoint-5"]:
-        return layout_perviewpoint(dff, pathname, bgimg), 'Data per viewpoint', 'show'
+        return layout_perviewpoint(dff, pathname, bgimg, width, height), 'Data per viewpoint', 'show'
 
     # Page: Sources
     elif pathname == "/sources":

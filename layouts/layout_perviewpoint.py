@@ -18,14 +18,14 @@ from app import app
 # - layout_home combines all the tabs into 1 page layout
 
 # Combined layout:
-def layout_perviewpoint(df, pathname, bgimg):
+def layout_perviewpoint(df, pathname, bgimg, width, height):
     # Filter DF based on pathname (welke viewpoint is het)
     layout = [
         dcc.Tabs(
             className='mb-5',
             children=
             [
-                dcc.Tab(label='Eyetracker', children=tab_eyes(df, bgimg)),
+                dcc.Tab(label='Eyetracker', children=tab_eyes(df, bgimg, width, height)),
                 dcc.Tab(label='GSR', children=tab_gsr(df)),
                 dcc.Tab(label='Head movement', children=tab_movement(df)),
                 dcc.Tab(label='Data quality', children=tab_quality(df)),
@@ -34,7 +34,7 @@ def layout_perviewpoint(df, pathname, bgimg):
     return layout
 
 # Tab 1: Eyes
-def tab_eyes(df, bgimg):
+def tab_eyes(df, bgimg, width, height):
     # 3D Gaze
     fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
                              y=df['ET_Gaze3DY'],
@@ -49,6 +49,8 @@ def tab_eyes(df, bgimg):
                             y='Gaze Y',
                             title='Gaze (average of left and right eye)',
                             opacity=0.4,
+                            width=width,
+                            height=height
                             )\
                             .update_traces(marker={'color':'yellow', 'size': 10})
 
