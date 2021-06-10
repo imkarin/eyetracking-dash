@@ -82,39 +82,45 @@ header = html.Header(
                                         className='px-3 pt-3 pb-2 mb-3',
                                         children=
                                         [
-                                            dcc.Dropdown(
-                                                id='filter-respname',
-                                                value='Anonymous 18-11-20 15h34m',
-                                                options=[
-                                                    {'label': 'Anonymous 18-11-20 10h43m', 'value': 'Anonymous 18-11-20 10h43m'},
-                                                    {'label': 'Anonymous 18-11-20 11h19m', 'value': 'Anonymous 18-11-20 11h19m'},
-                                                    {'label': 'Anonymous 18-11-20 12h20m', 'value': 'Anonymous 18-11-20 12h20m'},
-                                                    {'label': 'Anonymous 18-11-20 12h53m', 'value': 'Anonymous 18-11-20 12h53m'},
-                                                    {'label': 'Anonymous 18-11-20 14h39m', 'value': 'Anonymous 18-11-20 14h39m'},
-                                                    {'label': 'Anonymous 18-11-20 15h34m', 'value': 'Anonymous 18-11-20 15h34m'}
-                                                ]
-                                            )
+                                            # dcc.Checklist(
+                                            #     id='filter-respname',
+                                            #     value='Anonymous 18-11-20 15h34m',
+                                            #     options=[
+                                            #         {'label': 'Anonymous 18-11-20 10h43m', 'value': 'Anonymous 18-11-20 10h43m'},
+                                            #         {'label': 'Anonymous 18-11-20 11h19m', 'value': 'Anonymous 18-11-20 11h19m'},
+                                            #         {'label': 'Anonymous 18-11-20 12h20m', 'value': 'Anonymous 18-11-20 12h20m'},
+                                            #         {'label': 'Anonymous 18-11-20 12h53m', 'value': 'Anonymous 18-11-20 12h53m'},
+                                            #         {'label': 'Anonymous 18-11-20 14h39m', 'value': 'Anonymous 18-11-20 14h39m'},
+                                            #         {'label': 'Anonymous 18-11-20 15h34m', 'value': 'Anonymous 18-11-20 15h34m'}
+                                            #     ]
+                                            # ),
                                             # Old filters:
-                                            # dbc.Row(
-                                            #     [
-                                            #         dbc.Col(
-                                            #             html.Label(
-                                            #                 [
-                                            #                     html.P("Gender"),
-                                            #                     dcc.Checklist(
-                                            #                         id='filter-gender-checklist',
-                                            #                         value=['MALE', 'FEMALE'],
-                                            #                         className='m-2',
-                                            #                         options=[
-                                            #                             {'label': 'MALE', 'value': 'MALE'},
-                                            #                             {'label': 'FEMALE', 'value': 'FEMALE'}
-                                            #                         ]
-                                            #                     )
-                                            #                 ],
-                                            #                 className='filter-checklist'
-                                            #             ),
-                                            #             width=2
-                                            #         ),
+                                            dbc.Row(
+                                                [
+                                                    dbc.Col(
+                                                        html.Label(
+                                                            [
+                                                                html.P("Gender"),
+                                                                dcc.Checklist(
+                                                                    id='filter-respname',
+                                                                    value=['Anonymous 18-11-20 15h34m'],
+                                                                    className='m-2',
+                                                                    options=[
+                                                                        # {'label': 'MALE', 'value': 'MALE'},
+                                                                        # {'label': 'FEMALE', 'value': 'FEMALE'}
+                                                                        {'label': 'Anonymous 18-11-20 10h43m', 'value': 'Anonymous 18-11-20 10h43m'},
+                                                                        {'label': 'Anonymous 18-11-20 11h19m', 'value': 'Anonymous 18-11-20 11h19m'},
+                                                                        {'label': 'Anonymous 18-11-20 12h20m', 'value': 'Anonymous 18-11-20 12h20m'},
+                                                                        {'label': 'Anonymous 18-11-20 12h53m', 'value': 'Anonymous 18-11-20 12h53m'},
+                                                                        {'label': 'Anonymous 18-11-20 14h39m', 'value': 'Anonymous 18-11-20 14h39m'},
+                                                                        {'label': 'Anonymous 18-11-20 15h34m', 'value': 'Anonymous 18-11-20 15h34m'}
+                                                                    ]
+                                                                )
+                                                            ],
+                                                            className='filter-checklist'
+                                                        ),
+                                                        width=2
+                                                    ),
                                             #         dbc.Col(
                                             #             html.Label(
                                             #                 [
@@ -178,9 +184,9 @@ header = html.Header(
                                             #                 ],
                                             #                 className='filter-time-rec'
                                             #             )
-                                            #         )
-                                            #     ]  # End Row (filter controls)
-                                            # )
+                                                    # )
+                                                ]  # End Row (filter controls)
+                                            )
                                         ]
                                     ),  # End Card
                                 ]

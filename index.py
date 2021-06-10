@@ -103,7 +103,7 @@ def render_page_content(pathname, data):
         height = 226 * 1.4
 
     # Respondent filters:
-    name_filter = (dff['Resp name'] == data['respname'])
+    name_filter = (dff['Resp name'].isin(data['respname']))
 
     dff = dff[name_filter]
         # gender_filter & age_filter & time_filter]
