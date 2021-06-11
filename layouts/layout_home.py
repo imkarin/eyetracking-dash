@@ -30,7 +30,52 @@ def layout_home(df):
 
     fig_age = px.histogram(ages, title='Ages')
 
-    # table with stats
+    # table with viewpoint stats
+    stats_cols = ['Timestamp', 'Resp name',
+                  'Blink detected (binary)', 'GSR Raw (microSiemens)', 'Peak detected (binary)',
+                  'Fixation Index', 'Fixation Duration', 'Fixation Dispersion',
+                  'Saccade Index', 'Saccade Duration', 'Saccade Amplitude']
+    vp_cols = ([col for col in df.columns if all(vpa in col for vpa in ['Viewpoint', 'active'])])
+    vpdf = df[stats_cols + vp_cols].copy()
+    
+    def get_vp_stats():
+        vp_stats_default = {'Viewpoint' : '-',
+                            'Blinkrate' : '-', 
+                            'GSR peaks' : '-', 
+                            'GSR raw' : '-', 
+                            'Fixations amount' : '-', 
+                            'Fixations duration' : '-',
+                            'Fixations dispersion' : '-', 
+                            'Saccades amount' : '-', 
+                            'Saccades duration' : '-', 
+                            'Saccades amplitude': '-'}
+        vps_data = []
+        
+        for i, vp_col in enumerate(vp_cols):
+            # get the df where vp = active
+            vp = vpdf[vpdf[vp_col] == 1]
+
+            # replace vp_stats with actual stats
+            if len(vp) > 0:
+                blinkrate = round(len(vp[vp['Blink detected (binary)'] == 1]) / len(vp[vp['Blink detected (binary)'].notna()]), 4)
+                gsr_peaks = len(vp[vp['Peak detected (binary)'] == 1])
+
+                vp_stats = vp_stats_default.copy()
+                vp_stats['Viewpoint'] = i + 1
+                vp_stats['Blinkrate'] = blinkrate
+                vp_stats['GSR peaks'] = gsr_peaks
+                # vp_stats['GSR raw'] = 
+                # vp_stats['Fixations amount'] = 
+                # vp_stats['Fixations duration'] = 
+                # vp_stats['Fixations dispersion'] = 
+                # vp_stats['Saccades amount'] = 
+                # vp_stats['Saccades duration'] = 
+                # vp_stats['Saccades amplitude'] = 
+            vps_data.append(vp_stats)
+
+
+        return vps_data
+
     table_header = [
         html.Thead(html.Tr([html.Th("Viewpoint"), 
                             html.Th("Blink rate"),
@@ -44,18 +89,27 @@ def layout_home(df):
                             html.Th("Saccades amplitude"),
                             ]))
     ]
+    # Generate table cells with vp stats
+    table_rows = [
+        html.Tr([html.Td(vp_stats['Viewpoint']), 
+                 html.Td(vp_stats['Blinkrate']), 
+                 html.Td(vp_stats['GSR peaks']), 
+                 html.Td(vp_stats['GSR raw']), 
+                 html.Td(vp_stats['Fixations amount']), 
+                 html.Td(vp_stats['Fixations duration']), 
+                 html.Td(vp_stats['Fixations dispersion']), 
+                 html.Td(vp_stats['Saccades amount']), 
+                 html.Td(vp_stats['Saccades duration']), 
+                 html.Td(vp_stats['Saccades amplitude'])])
+        for vp_stats in get_vp_stats()
+    ]
 
-    row1 = html.Tr([html.Td("1"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
-    row2 = html.Tr([html.Td("2"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
-    row3 = html.Tr([html.Td("3"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
-    row4 = html.Tr([html.Td("4"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
-    row5 = html.Tr([html.Td("5"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
-
-    table_body = [html.Tbody([row1, row2, row3, row4, row5])]
-    stats_table = dbc.Table(table_header + table_body, bordered=True)
+    table_body = [html.Tbody(table_rows)]
+    vpstats_table = dbc.Table(table_header + table_body, bordered=True)
 
     # other info
     date = df['Resp rec datetime'].dt.date.mode()[0]
+    amt_resp = df['Resp name'].nunique()
 
     # page layout
     layout = [
@@ -64,7 +118,7 @@ def layout_home(df):
             children=
             [
                 html.H4('Viewpoint stats'),
-                html.P(f'Information about the recording sessions in Amsterdam, on {date}.'),
+                html.P(f'Statistic on the viewpoints from the recording sessions in Amsterdam, on {date}. You have selected {amt_resp} respondents.'),
                 dbc.Row(
                     children=
                     [
@@ -72,7 +126,7 @@ def layout_home(df):
                             width=12,
                             children=
                             [
-                                stats_table
+                                vpstats_table
                             ]
                         ),
                     ]
