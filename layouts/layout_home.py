@@ -13,6 +13,7 @@ from app import app
 
 # Combined layout:
 def layout_home(df):
+    # figures
     fig_rectime = px.scatter(x=df['Resp rec datetime'].unique(),
                              y=df['Resp name'].unique(),
                              title='Starttime recording')
@@ -29,6 +30,29 @@ def layout_home(df):
 
     fig_age = px.histogram(ages, title='Ages')
 
+    # table with stats
+    table_header = [
+        html.Thead(html.Tr([html.Th("Viewpoint"), 
+                            html.Th("Blink rate"),
+                            html.Th("GSR peaks"),
+                            html.Th("GSR raw"),
+                            html.Th("Fixations amount"),
+                            html.Th("Fixations duration"),
+                            html.Th("Fixations dispersion"),
+                            html.Th("Saccades amount"),
+                            html.Th("Saccades duration"),
+                            html.Th("Saccades amplitude"),
+                            ]))
+    ]
+
+    row1 = html.Tr([html.Td("1"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
+    row2 = html.Tr([html.Td("2"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
+    row3 = html.Tr([html.Td("3"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
+    row4 = html.Tr([html.Td("4"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
+    row5 = html.Tr([html.Td("5"), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value'), html.Td('Value')])
+
+    table_body = [html.Tbody([row1, row2, row3, row4, row5])]
+    stats_table = dbc.Table(table_header + table_body, bordered=True)
 
     # other info
     date = df['Resp rec datetime'].dt.date.mode()[0]
@@ -45,19 +69,33 @@ def layout_home(df):
                     children=
                     [
                         dbc.Col(   # recording start time
+                            width=12,
+                            children=
+                            [
+                                stats_table
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),  # End Section 'stats tables'
+
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Recording session'),
+                html.P(f'Information about the recording sessions in Amsterdam, on {date}.'),
+                dbc.Row(
+                    children=
+                    [
+                        dbc.Col(   # recording start time
                             width=6,
                             children=
                             [
                                 dcc.Graph(figure=fig_rectime)
                             ]
                         ),
-                        # dbc.Col(    # recording start time
-                        #     width=6,
-                        #     children=
-                        #     [
-                        #         dcc.Graph(figure=fig_rectime)
-                        #     ]
-                        # )
                     ]
                 ),
             ]
