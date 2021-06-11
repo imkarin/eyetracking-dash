@@ -64,36 +64,31 @@ def layout_home(df):
             # replace vp_stats with actual stats
             if len(vp) > 0:
                 blinkrate = round(vp['Blink detected (binary)'].mean(), 4)
-                gsr_peaks = len(vp[vp['Peak detected (binary)'] == 1]) / amt_resp
+                gsr_peaks = round(len(vp[vp['Peak detected (binary)'] == 1]) / amt_resp, 0)
+                gsr_raw = round(vp['GSR Raw (microSiemens)'].mean(), 2)
+                fix_amt = round(vp['Fixation Index'].nunique()/amt_resp, 0)
+                fix_dur = round(vp['Fixation Duration'].mean(), 2)
+                fix_dis = round(vp['Fixation Dispersion'].mean(), 4)
+                sac_amt = round(vp['Saccade Index'].nunique()/amt_resp, 0)
+                sac_dur = round(vp['Saccade Duration'].mean(), 2)
+                sac_amp = round(vp['Saccade Amplitude'].mean(), 4)
 
                 vp_stats['Blinkrate'] = blinkrate
                 vp_stats['GSR peaks'] = gsr_peaks
-                # vp_stats['GSR raw'] = 
-                # vp_stats['Fixations amount'] = 
-                # vp_stats['Fixations duration'] = 
-                # vp_stats['Fixations dispersion'] = 
-                # vp_stats['Saccades amount'] = 
-                # vp_stats['Saccades duration'] = 
-                # vp_stats['Saccades amplitude'] = 
+                vp_stats['GSR raw'] = gsr_raw
+                vp_stats['Fixations amount'] = fix_amt
+                vp_stats['Fixations duration'] = fix_dur
+                vp_stats['Fixations dispersion'] = fix_dis 
+                vp_stats['Saccades amount'] = sac_amt
+                vp_stats['Saccades duration'] = sac_dur
+                vp_stats['Saccades amplitude'] = sac_amp
             
             vps_data.append(vp_stats)
 
-
         return vps_data
 
-    table_header = [
-        html.Thead(html.Tr([html.Th("Viewpoint"), 
-                            html.Th("Blink rate"),
-                            html.Th("GSR peaks"),
-                            html.Th("GSR raw"),
-                            html.Th("Fixations amount"),
-                            html.Th("Fixations duration"),
-                            html.Th("Fixations dispersion"),
-                            html.Th("Saccades amount"),
-                            html.Th("Saccades duration"),
-                            html.Th("Saccades amplitude"),
-                            ]))
-    ]
+    table_header = [html.Thead(html.Tr([html.Th(key) for key in get_vp_stats()[0].keys()]))]
+    
     # Generate table cells with vp stats
     table_rows = [
         html.Tr([html.Td(vp_stats['Viewpoint']), 
