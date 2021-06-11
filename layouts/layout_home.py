@@ -30,6 +30,10 @@ def layout_home(df):
 
     fig_age = px.histogram(ages, title='Ages')
 
+    # other info
+    date = df['Resp rec datetime'].dt.date.mode()[0]
+    amt_resp = df['Resp name'].nunique()
+
     # table with viewpoint stats
     stats_cols = ['Timestamp', 'Resp name',
                   'Blink detected (binary)', 'GSR Raw (microSiemens)', 'Peak detected (binary)',
@@ -51,17 +55,17 @@ def layout_home(df):
                             'Saccades amplitude': '-'}
         vps_data = []
         
-        for i, vp_col in enumerate(vp_cols):
+        for i, vp_col in enumerate(sorted(vp_cols)):
             # get the df where vp = active
             vp = vpdf[vpdf[vp_col] == 1]
+            vp_stats = vp_stats_default.copy()
+            vp_stats['Viewpoint'] = i + 1
 
             # replace vp_stats with actual stats
             if len(vp) > 0:
-                blinkrate = round(len(vp[vp['Blink detected (binary)'] == 1]) / len(vp[vp['Blink detected (binary)'].notna()]), 4)
-                gsr_peaks = len(vp[vp['Peak detected (binary)'] == 1])
+                blinkrate = round(vp['Blink detected (binary)'].mean(), 4)
+                gsr_peaks = len(vp[vp['Peak detected (binary)'] == 1]) / amt_resp
 
-                vp_stats = vp_stats_default.copy()
-                vp_stats['Viewpoint'] = i + 1
                 vp_stats['Blinkrate'] = blinkrate
                 vp_stats['GSR peaks'] = gsr_peaks
                 # vp_stats['GSR raw'] = 
@@ -71,6 +75,7 @@ def layout_home(df):
                 # vp_stats['Saccades amount'] = 
                 # vp_stats['Saccades duration'] = 
                 # vp_stats['Saccades amplitude'] = 
+            
             vps_data.append(vp_stats)
 
 
@@ -106,10 +111,6 @@ def layout_home(df):
 
     table_body = [html.Tbody(table_rows)]
     vpstats_table = dbc.Table(table_header + table_body, bordered=True)
-
-    # other info
-    date = df['Resp rec datetime'].dt.date.mode()[0]
-    amt_resp = df['Resp name'].nunique()
 
     # page layout
     layout = [
