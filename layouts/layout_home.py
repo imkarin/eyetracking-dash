@@ -63,7 +63,7 @@ def layout_home(df):
             className='mt-5',
             children=
             [
-                html.H4('Recording session'),
+                html.H4('Viewpoint stats'),
                 html.P(f'Information about the recording sessions in Amsterdam, on {date}.'),
                 dbc.Row(
                     children=
