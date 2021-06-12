@@ -26,6 +26,11 @@ def layout_fullroute(df):
     # dff = df.copy()
     df = df.sort_values('Timestamp')
 
+    # colorargument = ''
+    
+    # if len(df['Resp name'].unique()) > 1:
+    #     colorargument = 'Resp name'
+
     layout = html.Div([
         dcc.Tabs(
             id='tabs-nav',
@@ -62,10 +67,12 @@ def layout_fullroute(df):
 # Tab 1: Eyes
 def tab_eyes(df):
     # Gaze 2D/3D
-    fig_3dgaze = px.scatter_3d(x=df['ET_Gaze3DX'],
-                             y=df['ET_Gaze3DY'],
-                             z=df['ET_Gaze3DZ'],
+    fig_3dgaze = px.scatter_3d(df,
+                            x='ET_Gaze3DX',
+                             y='ET_Gaze3DY',
+                             z='ET_Gaze3DZ',
                              title='Gaze 3D',
+                             color='Resp name',
                              size_max=10,
                              opacity=0.2)
                     
@@ -73,6 +80,7 @@ def tab_eyes(df):
                             x='Gaze X',
                             y='Gaze Y',
                             opacity=0.2,
+                            color='Resp name',
                             title='Gaze (average of left and right eye)')
 
     # Pupil diameter
@@ -80,6 +88,7 @@ def tab_eyes(df):
                         x='ET_PupilLeft',
                         y='ET_PupilRight',
                         title='Pupil size',
+                        color='Resp name',
                         opacity=.1,
                         labels={
                             "ET_PupilLeft": "Pupil left (mm)",
@@ -89,6 +98,7 @@ def tab_eyes(df):
     fig_blink = px.histogram(df,
                         x='Blink detected (binary)',
                         title='Detected blinks',
+                        color='Resp name',
                         nbins=2)
     
     # Fixation
@@ -334,35 +344,41 @@ def tab_movement(df):
     fig_gyrx = px.scatter(df,
                 y='ET_GyroX',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
     fig_gyry = px.scatter(df,
                 y='ET_GyroY',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
                 
 
     fig_gyrz = px.scatter(df,
                 y='ET_GyroZ',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accx = px.scatter(df,
                 y='ET_AccX',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accy = px.scatter(df,
                 y='ET_AccY',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accz = px.scatter(df,
                 y='ET_AccZ',
                 x='Timestamp',
+                color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
@@ -439,12 +455,14 @@ def tab_quality(df):
                         y='ET_DistanceLeft',
                         x='Timestamp',
                         opacity=0.3,
+                        color='Resp name',
                         title='Distance')
 
     fig_pupilscat = px.scatter(df,
                                 x='Timestamp',
                                 y='ET_PupilLeft',
                                 title='Pupil size',
+                                color='Resp name',
                                 opacity=0.3,
                                 )
 
@@ -452,6 +470,7 @@ def tab_quality(df):
                         x='Timestamp',
                         y='ET_ValidityLeftEye',
                         opacity=0.3,
+                        color='Resp name',
                         title='Eye Validity (left)')
 
     tab_layout = [
