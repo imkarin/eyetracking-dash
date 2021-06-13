@@ -175,29 +175,6 @@ def tab_eyes(df, bgimg, width, height):
                 ),
             ]
         ),
-
-        html.Section(           # Section: Saccade
-            className='mt-5',
-            children=
-            [
-                html.H4('Saccade'),
-                html.P(f'Information'),
-                dbc.Row(
-                    children=
-                    [
-                        # Add sacade plots...
-                        dbc.Col(
-                            width=6,
-                            children=
-                            [
-                                # dcc.Graph(figure=fig_fixationxy)
-                                html.P('Saccade graphs.')
-                            ]
-                        ),
-                    ]
-                ),
-            ]
-        )
     ]
     return tab_layout
 
