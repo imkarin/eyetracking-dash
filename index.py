@@ -34,12 +34,10 @@ df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
 reltime = pd.Series()
 
 for resp in df['Resp name'].unique():
-    # vp1 = df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    # vp2 = df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    vp3 = df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    vp4 = df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    # vp5 = df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-reltime = pd.concat([reltime, vp3, vp4])
+    for vp in ['Viewpoint_1 active on Tobii Glasses 2 Scene', 'Viewpoint_2 active on Tobii Glasses 2 Scene', 'Viewpoint_3 active on Tobii Glasses 2 Scene', 'Viewpoint_4 active on Tobii Glasses 2 Scene', 'Viewpoint_5 active on Tobii Glasses 2 Scene']:
+        if len(df[df['Resp name'] == resp][vp].unique()) > 1:
+            time = df[df['Resp name'] == resp][df[vp] == 1]['Timestamp'] - df[df['Resp name'] == resp][df[vp] == 1]['Timestamp'].iloc[0]
+            reltime = pd.concat([reltime, time])
     
 df['Relative timestamp'] = reltime
 

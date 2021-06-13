@@ -209,14 +209,14 @@ def tab_gsr(df):
     # Tonic signal
     fig_tonic = px.line(df.sort_values('Timestamp'),
                          y='Tonic signal (microSiemens)',
-                         x='Timestamp',
+                         x='Relative timestamp',
                          color='Resp name',
                          title='Tonic signal over time'
                          )
     # Phasic signal
     fig_phasic = px.line(df.sort_values('Timestamp'),
                          y='Phasic signal (microSiemens)',
-                         x='Timestamp',
+                         x='Relative timestamp',
                          color='Resp name',
                          title='Phasic signal over time'
                          )
@@ -224,14 +224,14 @@ def tab_gsr(df):
     # Peaks
     fig_peaks_detect = px.line(df.sort_values('Timestamp'),
                         y='Peak detected (binary)',
-                        x='Timestamp',
+                         x='Relative timestamp',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
 
     fig_peaks_amp = px.line(df.sort_values('Timestamp'),
                         y='Peak amplitude (microSiemens)',
-                        x='Timestamp',
+                         x='Relative timestamp',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
@@ -319,41 +319,41 @@ def tab_gsr(df):
 def tab_movement(df):
     fig_gyrx = px.scatter(df,
                 y='ET_GyroX',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
     fig_gyry = px.scatter(df,
                 y='ET_GyroY',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
                 
 
     fig_gyrz = px.scatter(df,
                 y='ET_GyroZ',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accx = px.scatter(df,
                 y='ET_AccX',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accy = px.scatter(df,
                 y='ET_AccY',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accz = px.scatter(df,
                 y='ET_AccZ',
-                x='Timestamp',
+                x='Relative timestamp',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
