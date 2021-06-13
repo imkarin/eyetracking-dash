@@ -47,22 +47,6 @@ def layout_fullroute(df):
     ])
     return layout
 
-# ROUTING TABS: The clicked tab determines the content shown in the tabs-content Div
-# @app.callback(Output('tabs-content', 'children'),
-#               Input('tabs-nav', 'value'))
-# def show_tabcontent(tab):
-#     if tab == 'tab-eyetracker':
-#         return tab_eyes(dff)
-
-#     elif tab == 'tab-gsr':
-#         return tab_gsr(dff)
-    
-#     elif tab == 'tab-movement':
-#         return tab_quality(dff)
-        
-#     elif tab == 'tab-quality':
-#         return tab_movement(dff)
-
 
 # Tab 1: Eyes
 def tab_eyes(df):
