@@ -41,6 +41,9 @@ for resp in df['Resp name'].unique():
     
 df['Relative timestamp'] = reltime
 
+df['Relative timestamp (s)'] = df['Relative timestamp'] / 1000
+df['Timestamp (s)'] = df['Timestamp'] / 1000
+
 # Content section (plots go here)
 content = html.Section(id='page-content')
 

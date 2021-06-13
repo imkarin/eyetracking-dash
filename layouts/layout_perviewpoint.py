@@ -185,23 +185,10 @@ def tab_eyes(df, bgimg, width, height):
 
 # Tab 2: GSR
 def tab_gsr(df):
-    # reltime = pd.Series()
-
-    # for resp in df['Resp name'].unique():
-    #     # vp1 = df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    #     # vp2 = df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    #     vp3 = df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    #     vp4 = df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    #     # vp5 = df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
-    # reltime = pd.concat([reltime, vp1, vp2, vp3, vp4])
-    
-    # df['Relative timestamp'] = reltime
-
-
     # GSR Raw
     fig_gsrraw = px.line(df.sort_values('Timestamp'),
                          y='GSR Raw (microSiemens)',
-                         x='Relative timestamp',
+                         x='Relative timestamp (s)',
                          color='Resp name',
                          title='GSR over time'
                          )
@@ -209,14 +196,14 @@ def tab_gsr(df):
     # Tonic signal
     fig_tonic = px.line(df.sort_values('Timestamp'),
                          y='Tonic signal (microSiemens)',
-                         x='Relative timestamp',
+                         x='Relative timestamp (s)',
                          color='Resp name',
                          title='Tonic signal over time'
                          )
     # Phasic signal
     fig_phasic = px.line(df.sort_values('Timestamp'),
                          y='Phasic signal (microSiemens)',
-                         x='Relative timestamp',
+                         x='Relative timestamp (s)',
                          color='Resp name',
                          title='Phasic signal over time'
                          )
@@ -224,14 +211,14 @@ def tab_gsr(df):
     # Peaks
     fig_peaks_detect = px.line(df.sort_values('Timestamp'),
                         y='Peak detected (binary)',
-                         x='Relative timestamp',
+                         x='Relative timestamp (s)',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
 
     fig_peaks_amp = px.line(df.sort_values('Timestamp'),
                         y='Peak amplitude (microSiemens)',
-                         x='Relative timestamp',
+                         x='Relative timestamp (s)',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
@@ -319,41 +306,41 @@ def tab_gsr(df):
 def tab_movement(df):
     fig_gyrx = px.scatter(df,
                 y='ET_GyroX',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
     fig_gyry = px.scatter(df,
                 y='ET_GyroY',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
                 
 
     fig_gyrz = px.scatter(df,
                 y='ET_GyroZ',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accx = px.scatter(df,
                 y='ET_AccX',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accy = px.scatter(df,
                 y='ET_AccY',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accz = px.scatter(df,
                 y='ET_AccZ',
-                x='Relative timestamp',
+                x='Relative timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
@@ -429,13 +416,13 @@ def tab_movement(df):
 def tab_quality(df):
     fig_int = px.scatter(df,
                         y='ET_DistanceLeft',
-                        x='Timestamp',
+                        x='Relative timestamp (s)',
                         opacity=0.3,
                         color='Resp name',
                         title='Distance')
 
     fig_pupilscat = px.scatter(df,
-                                x='Timestamp',
+                                x='Relative timestamp (s)',
                                 y='ET_PupilLeft',
                                 title='Pupil size',
                                 color='Resp name',
@@ -446,7 +433,7 @@ def tab_quality(df):
                                 )
 
     fig_val = px.scatter(df,
-                        x='Timestamp',
+                        x='Relative timestamp (s)',
                         y='ET_ValidityLeftEye',
                         color='Resp name',
                         opacity=0.3,

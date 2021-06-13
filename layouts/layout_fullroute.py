@@ -203,7 +203,7 @@ def tab_gsr(df):
     # GSR Raw
     fig_gsrraw = px.line(df.sort_values('Timestamp'),
                          y='GSR Raw (microSiemens)',
-                         x='Timestamp',
+                         x='Timestamp (s)',
                          color='Resp name',
                          title='GSR over time'
                          )
@@ -211,14 +211,14 @@ def tab_gsr(df):
     # Tonic signal
     fig_tonic = px.line(df.sort_values('Timestamp'),
                          y='Tonic signal (microSiemens)',
-                         x='Timestamp',
+                         x='Timestamp (s)',
                          color='Resp name',
                          title='Tonic signal over time'
                          )
     # Phasic signal
     fig_phasic = px.line(df.sort_values('Timestamp'),
                          y='Phasic signal (microSiemens)',
-                         x='Timestamp',
+                         x='Timestamp (s)',
                          color='Resp name',
                          title='Phasic signal over time'
                          )
@@ -226,14 +226,14 @@ def tab_gsr(df):
     # Peaks
     fig_peaks_detect = px.line(df.sort_values('Timestamp'),
                         y='Peak detected (binary)',
-                        x='Timestamp',
+                         x='Timestamp (s)',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
 
     fig_peaks_amp = px.line(df.sort_values('Timestamp'),
                         y='Peak amplitude (microSiemens)',
-                        x='Timestamp',
+                         x='Timestamp (s)',
                         color='Resp name',
                         title='Peaks detected over time'
                         )
@@ -337,41 +337,41 @@ def tab_gsr(df):
 def tab_movement(df):
     fig_gyrx = px.scatter(df,
                 y='ET_GyroX',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
     fig_gyry = px.scatter(df,
                 y='ET_GyroY',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
                 
 
     fig_gyrz = px.scatter(df,
                 y='ET_GyroZ',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accx = px.scatter(df,
                 y='ET_AccX',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accy = px.scatter(df,
                 y='ET_AccY',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
 
     fig_accz = px.scatter(df,
                 y='ET_AccZ',
-                x='Timestamp',
+                x='Timestamp (s)',
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
@@ -454,13 +454,13 @@ def tab_movement(df):
 def tab_quality(df):
     fig_int = px.scatter(df,
                         y='ET_DistanceLeft',
-                        x='Timestamp',
+                        x='Timestamp (s)',
                         opacity=0.3,
                         color='Resp name',
                         title='Distance')
 
     fig_pupilscat = px.scatter(df,
-                                x='Timestamp',
+                                x='Timestamp (s)',
                                 y='ET_PupilLeft',
                                 title='Pupil size',
                                 color='Resp name',
@@ -468,7 +468,7 @@ def tab_quality(df):
                                 )
 
     fig_val = px.scatter(df,
-                        x='Timestamp',
+                        x='Timestamp (s)',
                         y='ET_ValidityLeftEye',
                         opacity=0.3,
                         color='Resp name',
