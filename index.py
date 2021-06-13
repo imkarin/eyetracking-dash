@@ -31,6 +31,18 @@ df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='
 df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
 
+reltime = pd.Series()
+
+for resp in df['Resp name'].unique():
+    # vp1 = df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
+    # vp2 = df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_2 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
+    vp3 = df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_3 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
+    vp4 = df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_4 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
+    # vp5 = df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'] - df[df['Resp name'] == resp][df['Viewpoint_5 active on Tobii Glasses 2 Scene'] == 1]['Timestamp'].iloc[0]
+reltime = pd.concat([reltime, vp3, vp4])
+    
+df['Relative timestamp'] = reltime
+
 # Content section (plots go here)
 content = html.Section(id='page-content')
 
