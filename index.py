@@ -24,7 +24,7 @@ import base64
 # Load in the data (smaller version for development)
 print('Loading df...')
 df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='Unnamed: 0')
-# df = pd.read_csv('./data/Data_all_resp_SMALL.csv', low_memory=False, index_col='Unnamed: 0')
+df = df.sort_values('Timestamp')
 
 
 # Df preparation

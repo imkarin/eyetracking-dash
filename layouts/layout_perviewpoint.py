@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.express as px
+from plotly.shapeannotation import annotation_params_for_line, annotation_params_for_rect
 
 from app import app
 
@@ -451,35 +452,56 @@ def tab_movement(df):
 
 # Tab 4: Data quality
 def tab_quality(df):
-    fig_int = px.scatter(df,
+    # info for the figures
+    dist_max = df['ET_DistanceLeft'].max()
+
+    # Distance scatter
+    fig_dist = px.scatter(df,
                         y='ET_DistanceLeft',
                         x='Relative timestamp (s)',
                         opacity=0.3,
                         color='Resp name',
-                        title='Distance')
+                        labels={
+                            'ET_DistanceLeft': 'Distance',
+                            'Relative timestamp (s)': 'Time (s)'
+                        },
+                        title='Distance').update_traces(marker_size=4)
+    fig_dist.add_hline(y=900, line_width=1, line_color='red')
+    fig_dist.add_hrect(y0=900, y1=dist_max+2000, fillcolor='red', opacity=0.15, line_width=0, 
+                       annotation_text='90 centimeter threshold', annotation_position='bottom left')
+    fig_dist.update_annotations(font_color='white')
 
+    # Pupil diamater scatter
     fig_pupilscat = px.scatter(df,
                                 x='Relative timestamp (s)',
                                 y='ET_PupilLeft',
                                 title='Pupil size',
                                 color='Resp name',
-                                opacity=0.3,
-                                # labels={
-                                #     "ET_PupilLeft": "Pupil left (mm)",
-                                #     "ET_PupilRight": "Pupil right (mm)"}
-                                )
+                                opacity=0.2,
+                                labels={
+                                    'ET_PupilLeft': 'Pupil left (mm)',
+                                    'Relative timestamp (s)': 'Time (s)'
+                                },
+                                ).update_traces(marker_size=4)
+    fig_pupilscat.add_hrect(y0=4.7, y1=5.3, fillcolor='red', opacity=0.15, line_width=0, 
+                            annotation_text='Outliers', annotation_position='bottom left')
+    fig_pupilscat.update_annotations(font_color='white')
 
+    # Validity scatter
     fig_val = px.scatter(df,
                         x='Relative timestamp (s)',
                         y='ET_ValidityLeftEye',
                         color='Resp name',
-                        opacity=0.3,
-                        title='Eye Validity (left)')
-
-    # fig_eye3d = px.scatter_3d(df,
-    #             x='ET_DistanceLeft',
-    #             y='ET_DistanceRight',
-    #             z='ET_Distance3D')
+                        opacity=0.2,
+                        title='Eye Validity (left)',
+                        labels={
+                            'ET_ValidityLeftEye': 'Validity',
+                            'Relative timestamp (s)': 'Time (s)'
+                        }
+                        ).update_traces(marker_size=4)
+    fig_val.add_hline(y=4, line_width=1, line_color='red', line_dash='dot',
+                      annotation_text="iMotions: '4 = certainly invalid'", annotation_position='bottom left')
+    fig_val.update_annotations(font_color='crimson', yshift=-2, xshift=2)
 
     tab_layout = [
         html.Section(
@@ -489,7 +511,7 @@ def tab_quality(df):
                 html.H4('Distance to glasses'),
                 html.P(children=
                     [
-                        html.Span('Estimated distance between the Eyetracker glasses and the eyes, measured by Tobii Glasses 2 (uninterpolated, left eye).'),
+                        html.Span('Estimated distance between the Eyetracker and the eyes, measured by Tobii Glasses 2 (uninterpolated, left eye).'),
                         html.Br(),
                         html.Span('Distance on the y-axis, timestamp on the x-axis.'),
                     ]
@@ -501,7 +523,7 @@ def tab_quality(df):
                             width=12,
                             children=
                             [
-                                dcc.Graph(figure=fig_int)
+                                dcc.Graph(figure=fig_dist)
                             ]
                         ),
                     ]

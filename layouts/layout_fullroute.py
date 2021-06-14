@@ -22,15 +22,6 @@ from app import app
 
 # Combined layout:
 def layout_fullroute(df):
-    # global dff 
-    # dff = df.copy()
-    df = df.sort_values('Timestamp')
-
-    # colorargument = ''
-    
-    # if len(df['Resp name'].unique()) > 1:
-    #     colorargument = 'Resp name'
-
     layout = html.Div([
         dcc.Tabs(
             id='tabs-nav',
