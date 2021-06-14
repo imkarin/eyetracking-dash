@@ -13,7 +13,7 @@ from dash.exceptions import PreventUpdate
 
 from app import app
 from callbacks import toggle_filter_collapse, update_filters
-from layouts.layout_global import header, sidebar
+from layouts.layout_global import layout_global
 from layouts.layout_home import layout_home
 from layouts.layout_fullroute import layout_fullroute
 from layouts.layout_perviewpoint import layout_perviewpoint
@@ -31,26 +31,13 @@ df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='
 df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
 
-reltime = pd.Series()
-
-for resp in df['Resp name'].unique():
-    for vp in ['Viewpoint_1 active on Tobii Glasses 2 Scene', 'Viewpoint_2 active on Tobii Glasses 2 Scene', 'Viewpoint_3 active on Tobii Glasses 2 Scene', 'Viewpoint_4 active on Tobii Glasses 2 Scene', 'Viewpoint_5 active on Tobii Glasses 2 Scene']:
-        if len(df[df['Resp name'] == resp][vp].unique()) > 1:
-            time = df[df['Resp name'] == resp][df[vp] == 1]['Timestamp'] - df[df['Resp name'] == resp][df[vp] == 1]['Timestamp'].iloc[0]
-            reltime = pd.concat([reltime, time])
-    
-df['Relative timestamp'] = reltime
-
-df['Relative timestamp (s)'] = df['Relative timestamp'] / 1000
-df['Timestamp (s)'] = df['Timestamp'] / 1000
-
 # Content section (plots go here)
 content = html.Section(id='page-content')
 
 # Main (header + content wrapper)
 main = html.Main(
     [
-        header,
+        layout_global(df)[1],  # <-- header
         content,
     ],
     id='main'
@@ -64,7 +51,7 @@ app.layout = html.Div(
         dcc.Store(id='data-storage', storage_type='session'),     # data/filters stored in Store
 
         # body
-        sidebar, 
+        layout_global(df)[0], # <-- sidebar 
         main
     ]
 )
