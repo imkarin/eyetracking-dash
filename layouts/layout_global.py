@@ -8,10 +8,10 @@ from datetime import date
 # HTML elements that occur in all pages (sidebar, header)
 sidebar = html.Aside(
     [
-        html.H2("Sidebar", className="display-4"),
+        html.H2("Sensing Streetscapes", className="sidebartitle"),
         html.Hr(),
         html.P(
-            "A simple sidebar layout with navigation links", className="lead"
+            "Dashboard for the eyetracking data measured in Amsterdam by Sensing Streetscapes.", className="lead"
         ),
         dbc.Nav(
             [
@@ -36,7 +36,7 @@ sidebar = html.Aside(
                             dbc.NavLink("Viewpoint 5", href="viewpoint-5", active="exact")),
                         ],
                     ),
-                dbc.NavLink("Sources", href="/sources", active="exact", disabled=True)
+                dbc.NavLink("Sources", href="/sources", active="exact")
             ],
             vertical=True,
             pills=True,
@@ -82,19 +82,7 @@ header = html.Header(
                                         className='px-3 pt-3 pb-2 mb-3',
                                         children=
                                         [
-                                            # dcc.Checklist(
-                                            #     id='filter-respname',
-                                            #     value='Anonymous 18-11-20 15h34m',
-                                            #     options=[
-                                            #         {'label': 'Anonymous 18-11-20 10h43m', 'value': 'Anonymous 18-11-20 10h43m'},
-                                            #         {'label': 'Anonymous 18-11-20 11h19m', 'value': 'Anonymous 18-11-20 11h19m'},
-                                            #         {'label': 'Anonymous 18-11-20 12h20m', 'value': 'Anonymous 18-11-20 12h20m'},
-                                            #         {'label': 'Anonymous 18-11-20 12h53m', 'value': 'Anonymous 18-11-20 12h53m'},
-                                            #         {'label': 'Anonymous 18-11-20 14h39m', 'value': 'Anonymous 18-11-20 14h39m'},
-                                            #         {'label': 'Anonymous 18-11-20 15h34m', 'value': 'Anonymous 18-11-20 15h34m'}
-                                            #     ]
-                                            # ),
-                                            # Old filters:
+                                            # Old filters are commented out:
                                             dbc.Row(
                                                 [
                                                     dbc.Col(

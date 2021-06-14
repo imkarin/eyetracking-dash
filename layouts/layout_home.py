@@ -114,7 +114,13 @@ def layout_home(df):
             children=
             [
                 html.H4('Viewpoint stats'),
-                html.P(f'Statistic on the viewpoints from the recording sessions in Amsterdam, on {date}. You have selected {amt_resp} respondents.'),
+                html.P([
+                    html.Span('Statistical averages on the viewpoints from the recording sessions in Amsterdam, on '),
+                    html.Strong(f'{date}'),
+                    html.Span('. You have selected'),
+                    html.Strong(f' {amt_resp} respondents.')
+                ]),
+                html.Br(),
                 dbc.Row(
                     children=
                     [
@@ -135,7 +141,7 @@ def layout_home(df):
             children=
             [
                 html.H4('Recording session'),
-                html.P(f'Information about the recording sessions in Amsterdam, on {date}.'),
+                html.P(f'Starting time of the recording sessions in Amsterdam, on {date}.'),
                 dbc.Row(
                     children=
                     [

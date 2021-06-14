@@ -4,14 +4,19 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 16rem;
+  width: 18rem;
   padding: 2rem 1rem;
   background: #f8f9fa;
   z-index:999;
 }
 
+.sidebartitle {
+  font-size: 2.8em;
+  font-weight: 300;
+}
+
 #main {
-  margin-left: 18rem;
+  margin-left: 20rem;
   margin-right: 2rem;
   padding: 2rem 1rem;
 }

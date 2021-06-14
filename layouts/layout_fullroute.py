@@ -271,9 +271,7 @@ def tab_gsr(df):
                 html.H4('Tonic & Phasic signal'),
                 html.P(children=
                 [
-                    html.Span('Tonic signal: .'),
-                    html.Br(),
-                    html.Span('''Phasic signal: '''),
+                    html.Span('Tonic and Phasic signal (y-axis) over time in seconds (x-axis).'),
                 ]),
                 dbc.Row(
                     children=
@@ -483,11 +481,12 @@ def tab_quality(df):
                 html.Br(),
                 html.H4('Distance'),
                 html.P(children=
-                [
-                    html.Span('Estimated distance between the Eyetracker glasses and the eyes, measured by Tobii Glasses 2 (uninterpolated, left eye).'),
-                    html.Br(),
-                    html.Span('Distance on the y-axis, timestamp on the x-axis.'),
-                ]),
+                    [
+                        html.Span('Estimated distance between the Eyetracker glasses and the eyes, measured by Tobii Glasses 2 (uninterpolated, left eye).'),
+                        html.Br(),
+                        html.Span('Distance on the y-axis, timestamp on the x-axis.'),
+                    ]
+                ),
                 dbc.Row(
                     children=
                     [
@@ -509,11 +508,12 @@ def tab_quality(df):
             [
                 html.H4('Pupil size & Data validity'),
                 html.P(children=
-                [
-                    html.Span('''Pupil diameter: diameter of the left (x-axis) and right (y-axis) pupil.'''),
-                    html.Br(),
-                    html.Span('Validity: Level of certainty that the eyetracker has recorded valid data for the left eye (y-axis) over time (x-axis), where 0 = certainly valid and 5 = certainly invalid.'),
-                ]),
+                    [
+                        html.Span('''Pupil diameter: diameter of the left (x-axis) and right (y-axis) pupil.'''),
+                        html.Br(),
+                        html.Span('Validity: Level of certainty that the eyetracker has recorded valid data for the left eye (y-axis) over time (x-axis), where 0 = certainly valid and 5 = certainly invalid.'),
+                    ]
+                ),
                 dbc.Row(
                     children=
                     [

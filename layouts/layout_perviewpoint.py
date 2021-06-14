@@ -54,8 +54,7 @@ def tab_eyes(df, bgimg, width, height):
                             opacity=0.4,
                             width=width,
                             height=height
-                            )\
-                            .update_traces(marker={'color':'yellow', 'size': 10})
+                            )
 
     fig_2dgazeinter.update_layout(
                 images= [dict(
@@ -108,7 +107,15 @@ def tab_eyes(df, bgimg, width, height):
             children=
             [
                 html.H4('Gaze points'),
-                html.P(f'Information'),
+                html.P(children=
+                [
+                    html.Span('Gaze points of the respondents.'),
+                    html.Br(),
+                    html.Span('''2D points: coordinates (X, Y) of the gaze point, relative to top left corner of the screen,
+                    average of left and right eye, uninterpolated).'''),
+                    html.Br(),
+                    html.Span('''3D points: coordinates (X, Y, Z) of the gaze point, relative to position of eyetracker's scene camera.'''),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -135,7 +142,14 @@ def tab_eyes(df, bgimg, width, height):
             children=
             [
                 html.H4('Pupil diameter & blinks'),
-                html.P('Information'),
+                html.P(children=
+                [
+                    html.Span('Pupil diameter and blink detection.'),
+                    html.Br(),
+                    html.Span('''Pupil diameter: diameter of the left (x-axis) and right (y-axis) pupil.'''),
+                    html.Br(),
+                    html.Span('''Blink detection: binary representation of blinks (y-axis) over time (x-axis), where 1 = blink, 0 = no blink.'''),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -164,7 +178,10 @@ def tab_eyes(df, bgimg, width, height):
             children=
             [
                 html.H4('Fixations'),
-                html.P(f'Information'),
+                html.P(children=
+                [
+                    html.Span('Fixations X and Y coordinates plotted against each other, where size = fixation duration and color = fixation dispersion.'),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -229,7 +246,12 @@ def tab_gsr(df):
             children=
             [
                 html.H4('GSR Raw'),
-                html.P(f'Information'),
+                html.P(children=
+                [
+                    html.Span('Processed and imported data GSR peaks.'),
+                    html.Br(),
+                    html.Span('''Raw measurements of GSR signal'''),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -249,7 +271,10 @@ def tab_gsr(df):
             children=
             [
                 html.H4('Tonic & Phasic signal'),
-                html.P(f'Information'),
+                html.P(children=
+                [
+                    html.Span('Tonic and Phasic signal (y-axis) over time in seconds (x-axis).'),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -276,7 +301,12 @@ def tab_gsr(df):
             children=
             [
                 html.H4('GSR Peaks'),
-                html.P(f'Information'),
+                html.P(children=
+                [
+                    html.Span('Peaks detected: binary representation of GSR peaks (y-axis) over time (x-axis), where 1 = peak and 0 = no peak.'),
+                    html.Br(),
+                    html.Span('Peaks amplitude: amplitude of GSR peaks (y-axis) over time (x-axis).'),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -352,8 +382,15 @@ def tab_movement(df):
             className='mt-5',
             children=
             [
-                html.H4('Header'),
-                html.P(f'Information'),
+                html.H4('Head movement'),
+                html.P(children=
+                [
+                    html.Span('Movement of the head measured by Tobii Glasses 2.'),
+                    html.Br(),
+                    html.Span('''Gyroscope: Rotation of the glasses along the X, Y an Z axis over time.'''),
+                    html.Br(),
+                    html.Span('''Accelerometer: Motion along the X, Y and Z axis over time.'''),
+                ]),
                 dbc.Row(
                     children=
                     [
@@ -381,7 +418,7 @@ def tab_movement(df):
                     ]
                 ),
                 dbc.Row(
-                    children=
+                    children= 
                     [
                         dbc.Col(
                             width=4,
@@ -449,8 +486,14 @@ def tab_quality(df):
             className='mt-5',
             children=
             [
-                html.H4('Header'),
-                html.P(f'Information'),
+                html.H4('Distance to glasses'),
+                html.P(children=
+                    [
+                        html.Span('Estimated distance between the Eyetracker glasses and the eyes, measured by Tobii Glasses 2 (uninterpolated, left eye).'),
+                        html.Br(),
+                        html.Span('Distance on the y-axis, timestamp on the x-axis.'),
+                    ]
+                ),
                 dbc.Row(
                     children=
                     [
@@ -461,6 +504,21 @@ def tab_quality(df):
                                 dcc.Graph(figure=fig_int)
                             ]
                         ),
+                    ]
+                ),
+            ]
+        ),
+
+        html.Section(
+            className='mt-5',
+            children=
+            [
+                html.H4('Pupil size & Data validity'),
+                html.P(children=
+                    [
+                        html.Span('''Pupil diameter: diameter of the left (x-axis) and right (y-axis) pupil.'''),
+                        html.Br(),
+                        html.Span('Validity: Level of certainty that the eyetracker has recorded valid data for the left eye (y-axis) over time (x-axis), where 0 = certainly valid and 5 = certainly invalid.'),
                     ]
                 ),
                 dbc.Row(
