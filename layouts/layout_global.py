@@ -91,30 +91,24 @@ def layout_global(df):
                                                 dbc.Row(
                                                     [
                                                         dbc.Col(
-                                                            html.Label(
-                                                                [
-                                                                    html.P("Gender"),
-                                                                    dcc.Checklist(
-                                                                        id='filter-respname',
-                                                                        value=[all_resp_names[-1]],
-                                                                        className='m-2',
-                                                                        options=[
-                                                                            # {'label': 'MALE', 'value': 'MALE'},
-                                                                            # {'label': 'FEMALE', 'value': 'FEMALE'}
-                                                                            {'label': name, 'value': name} for name in all_resp_names
-                                                                            # {'label': 'Anonymous 18-11-20 10h43m', 'value': 'Anonymous 18-11-20 10h43m'},
-                                                                            # {'label': 'Anonymous 18-11-20 11h19m', 'value': 'Anonymous 18-11-20 11h19m'},
-                                                                            # {'label': 'Anonymous 18-11-20 12h20m', 'value': 'Anonymous 18-11-20 12h20m'},
-                                                                            # {'label': 'Anonymous 18-11-20 12h53m', 'value': 'Anonymous 18-11-20 12h53m'},
-                                                                            # {'label': 'Anonymous 18-11-20 14h39m', 'value': 'Anonymous 18-11-20 14h39m'},
-                                                                            # {'label': 'Anonymous 18-11-20 15h34m', 'value': 'Anonymous 18-11-20 15h34m'}
-                                                                        ]
-                                                                    )
-                                                                ],
-                                                                className='filter-checklist'
-                                                            ),
-                                                            width=3
+                                                            className='filter-checklist',
+                                                            width=3,
+                                                            children=
+                                                            [
+                                                                dbc.Label('Respondent name'),
+                                                                dbc.Checklist(
+                                                                    id='filter-respname',
+                                                                    value=[all_resp_names[-1]],
+                                                                    className='m-2',
+                                                                    options=[
+                                                                        # {'label': 'MALE', 'value': 'MALE'},
+                                                                        # {'label': 'FEMALE', 'value': 'FEMALE'}
+                                                                        {'label': name, 'value': name} for name in all_resp_names
+                                                                    ]
+                                                                )
+                                                            ]
                                                         ),
+
                                                 #         dbc.Col(
                                                 #             html.Label(
                                                 #                 [
