@@ -501,7 +501,7 @@ def tab_quality(df):
                         ).update_traces(marker_size=4)
     fig_val.add_hline(y=4, line_width=1, line_color='red', line_dash='dot',
                       annotation_text="iMotions: '4 = certainly invalid'", annotation_position='bottom left')
-    fig_val.update_annotations(font_color='crimson', yshift=-2, xshift=2)
+    fig_val.update_annotations(font_color='red', yshift=-2, xshift=2)
 
     tab_layout = [
         html.Section(
