@@ -52,25 +52,6 @@ def tab_eyes(df):
                              size_max=10,
                              opacity=0.2)
 
-    fig_gaze = make_subplots(rows=1, cols=3)
-
-    fig_gaze.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DX'], mode='markers', name='Gaze X'),
-        row=1, col=1
-    )
-
-    fig_gaze.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DY'], mode='markers', name='Gaze Y'),
-        row=1, col=2
-    )
-
-    fig_gaze.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DZ'], mode='markers', name='Gaze Z'),
-        row=1, col=3
-    )
-
-    fig_gaze.update_layout(title_text="Gaze X/Y/Z")
-
     fig_2dgazeinter = px.scatter(df,
                             x='Gaze X',
                             y='Gaze Y',
@@ -138,7 +119,7 @@ def tab_eyes(df):
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_gaze)
+                                dcc.Graph(figure=fig_3dgaze)
                             ]
                         ),
                     ]
@@ -363,6 +344,44 @@ def tab_movement(df):
                 color='Resp name',
                 opacity=0.3).update_traces(marker_size=2)
 
+    fig_gyr = make_subplots(rows=1, cols=3)
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        row=1, col=1
+    )
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        row=1, col=2
+    )
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        row=1, col=3
+    )
+
+    fig_gyr.update_layout(width=1100, height=450, title_text="Gyroscope X/Y/Z")
+
+    fig_acc = make_subplots(rows=1, cols=3)
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        row=1, col=1
+    )
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        row=1, col=2
+    )
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        row=1, col=3
+    )
+
+    fig_acc.update_layout(width=1100, height=450, title_text="Acceleration X/Y/Z")
+
 
     fig_accx = px.scatter(df,
                 y='ET_AccX',
@@ -405,26 +424,12 @@ def tab_movement(df):
                     children=
                     [
                         dbc.Col(
-                            width=4,
+                            width=12,
                             children=
                             [
-                                dcc.Graph(figure=fig_gyrx)
+                                dcc.Graph(figure=fig_gyr)
                             ]
                         ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gyry)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gyrz)
-                            ]
-                        )
                     ]
                 ),
                 dbc.Row(
@@ -434,23 +439,9 @@ def tab_movement(df):
                             width=4,
                             children=
                             [
-                                dcc.Graph(figure=fig_accx)
+                                dcc.Graph(figure=fig_acc)
                             ]
                         ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_accy)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_accz)
-                            ]
-                        )
                     ]
                 ),
             ]
