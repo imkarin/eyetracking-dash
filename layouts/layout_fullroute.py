@@ -6,6 +6,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import base64
 
 from app import app
@@ -50,7 +51,26 @@ def tab_eyes(df):
                              color='Resp name',
                              size_max=10,
                              opacity=0.2)
-                    
+
+    fig_gaze = make_subplots(rows=1, cols=3)
+
+    fig_gaze.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DX'], mode='markers', name='Gaze X'),
+        row=1, col=1
+    )
+
+    fig_gaze.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DY'], mode='markers', name='Gaze Y'),
+        row=1, col=2
+    )
+
+    fig_gaze.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_Gaze3DZ'], mode='markers', name='Gaze Z'),
+        row=1, col=3
+    )
+
+    fig_gaze.update_layout(title_text="Gaze X/Y/Z")
+
     fig_2dgazeinter = px.scatter(df,
                             x='Gaze X',
                             y='Gaze Y',
@@ -118,7 +138,7 @@ def tab_eyes(df):
                             width=6,
                             children=
                             [
-                                dcc.Graph(figure=fig_3dgaze)
+                                dcc.Graph(figure=fig_gaze)
                             ]
                         ),
                     ]

@@ -26,7 +26,6 @@ print('Loading df...')
 df = pd.read_csv('./data/Data_all_respondents.csv', low_memory=True, index_col='Unnamed: 0')
 df = df.sort_values('Timestamp')
 
-
 # Df preparation
 df = df.reset_index(drop=True)
 df['Resp rec datetime'] = pd.to_datetime(df['Resp rec datetime'])
