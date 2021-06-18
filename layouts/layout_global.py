@@ -51,140 +51,138 @@ def layout_global(df):
 
 
     header = html.Header(
-        className='pt-4 mb-1',
-        children=
-        [
-            dbc.Row(
-                [   # Paginatitel
-                    dbc.Col(
-                        width=4,
+    className='pt-4 mb-1',
+    children=
+    [
+        dbc.Row(
+            [   # Paginatitel
+                dbc.Col(
+                    width=4,
+                    children=
+                    [
+                        html.H2(
+                            "Home",
+                            id="page-title"
+                        ),
+                    ]
+                ),
+                
+                # Filter respondents (collapse)
+                dbc.Col(
+                    html.Div(
+                        className='d-flex flex-column align-items-end',
                         children=
                         [
-                            html.H2(
-                                "Home",
-                                id="page-title"
+                            dbc.Button(
+                                "Filter respondents",
+                                id="collapse-button",
+                                className="mb-3",
+                                color="primary",
                             ),
-                        ]
-                    ),
-                    
-                    # Filter respondents (collapse)
-                    dbc.Col(
-                        html.Div(
-                            className='d-flex flex-column align-items-end',
-                            children=
-                            [
-                                dbc.Button(
-                                    "Filter respondents",
-                                    id="collapse-button",
-                                    className="mb-3",
-                                    color="primary",
-                                ),
-                                dbc.Collapse(
-                                    id="filter-collapse",
-                                    children=
-                                    [
-                                        dbc.Card(
-                                            className='px-3 pt-3 pb-2 mb-3',
-                                            children=
-                                            [
-                                                # Old filters are commented out:
-                                                dbc.Row(
-                                                    [
-                                                        dbc.Col(
-                                                            className='filter-checklist',
-                                                            width=3,
-                                                            children=
+                            dbc.Collapse(
+                                id="filter-collapse",
+                                children=
+                                [
+                                    dbc.Card(
+                                        className='px-3 pt-3 pb-2 mb-3',
+                                        children=
+                                        [
+                                            dbc.Row(
+                                                [
+                                                    dbc.Col(
+                                                        html.Label(
                                                             [
-                                                                dbc.Label('Respondent name'),
-                                                                dbc.Checklist(
-                                                                    id='filter-respname',
-                                                                    value=[all_resp_names[-1]],
+                                                                html.P("Gender"),
+                                                                dcc.Checklist(
+                                                                    id='filter-gender-checklist',
+                                                                    value=['MALE', 'FEMALE'],
                                                                     className='m-2',
                                                                     options=[
-                                                                        # {'label': 'MALE', 'value': 'MALE'},
-                                                                        # {'label': 'FEMALE', 'value': 'FEMALE'}
-                                                                        {'label': name, 'value': name} for name in all_resp_names
+                                                                        {'label': 'MALE', 'value': 'MALE'},
+                                                                        {'label': 'FEMALE', 'value': 'FEMALE'}
                                                                     ]
+                                                                )
+                                                            ],
+                                                            className='filter-checklist'
+                                                        ),
+                                                        width=2
+                                                    ),
+                                                    dbc.Col(
+                                                        html.Label(
+                                                            [
+                                                                html.P("Age"),
+                                                                dcc.RangeSlider(
+                                                                    id='filter-age-slider',
+                                                                    className='m-2',
+                                                                    value=[16, 18],
+                                                                    min=16,
+                                                                    max=18,
+                                                                    step=1,
+                                                                    marks={
+                                                                        16: '16',
+                                                                        17: '17',
+                                                                        18: '18'
+                                                                    }
                                                                 )
                                                             ]
                                                         ),
-
-                                                        dbc.Col(
-                                                            html.Label(
-                                                                [
-                                                                    html.P("Age"),
-                                                                    dcc.RangeSlider(
-                                                                        id='filter-age-slider',
-                                                                        className='m-2',
-                                                                        value=[16, 18],
-                                                                        min=16,
-                                                                        max=18,
-                                                                        step=1,
-                                                                        marks={
-                                                                            16: '16',
-                                                                            17: '17',
-                                                                            18: '18'
-                                                                        }
-                                                                    )
-                                                                ]
-                                                            ),
-                                                            width = 5,
-                                                        ),
-                                                        dbc.Col(
-                                                            # width = 5,
-                                                            children=
-                                                            html.Div(
-                                                                [
-                                                                    html.P("Time of recording"),
-                                                                    html.Div(
-                                                                        className='d-flex flex-wrap justify-content-between',
-                                                                        children=
-                                                                        [
-                                                                            html.Label(
-                                                                                [
-                                                                                    html.P('Begin'),
-                                                                                    dcc.Input(
-                                                                                        id='filter-timebegin-input',
-                                                                                        type='text',
-                                                                                        maxLength=5,
-                                                                                        value="00:00",
-                                                                                        placeholder="00:00"
-                                                                                    )
-                                                                                ],
-                                                                                className='d-flex justify-content-between mb-0',
-                                                                            ),
-                                                                            html.Label(
-                                                                                className='d-flex flex-wrap justify-content-between',
-                                                                                children=
-                                                                                [
-                                                                                    html.P('End'),
-                                                                                    dcc.Input(
-                                                                                        id='filter-timeend-input',
-                                                                                        type='text',
-                                                                                        maxLength=5,
-                                                                                        value='23:59',
-                                                                                        placeholder='23:59'
-                                                                                    )
-                                                                                ]
-                                                                            )
-                                                                        ],
-                                                                    )
-                                                                ],
-                                                                className='filter-time-rec'
-                                                            )
+                                                        width = 5,
+                                                    ),
+                                                    dbc.Col(
+                                                        # width = 5,
+                                                        children=
+                                                        html.Div(
+                                                            [
+                                                                html.P("Time of recording"),
+                                                                html.Div(
+                                                                    className='d-flex flex-wrap justify-content-between',
+                                                                    children=
+                                                                    [
+                                                                        html.Label(
+                                                                            [
+                                                                                html.P('Begin'),
+                                                                                dcc.Input(
+                                                                                    id='filter-timebegin-input',
+                                                                                    type='text',
+                                                                                    maxLength=5,
+                                                                                    value="00:00",
+                                                                                    placeholder="00:00"
+                                                                                )
+                                                                            ],
+                                                                            className='d-flex justify-content-between mb-0',
+                                                                        ),
+                                                                        html.Label(
+                                                                            className='d-flex flex-wrap justify-content-between',
+                                                                            children=
+                                                                            [
+                                                                                html.P('End'),
+                                                                                dcc.Input(
+                                                                                    id='filter-timeend-input',
+                                                                                    type='text',
+                                                                                    maxLength=5,
+                                                                                    value='23:59',
+                                                                                    placeholder='23:59'
+                                                                                )
+                                                                            ]
+                                                                        )
+                                                                    ],
+                                                                )
+                                                            ],
+                                                            className='filter-time-rec'
                                                         )
-                                                    ]  # End Row (filter controls)
-                                                )
-                                            ]
-                                        ),  # End Card
-                                    ]
-                                ), # End Collapse
-                            ],
-                        ), # End Div
-                    ) # End Col
-                ]
-            ) # End Row
-        ]
+                                                    )
+                                                ]  # End Row (filter controls)
+                                            )
+                                        ]
+                                    ),  # End Card
+                                ]
+                            ), # End Collapse
+                        ],
+                    ), # End Div
+                ) # End Col
+            ]
+        ) # End Row
+    ]
     ) # End Div (Header)
-
+    
     return sidebar, header
