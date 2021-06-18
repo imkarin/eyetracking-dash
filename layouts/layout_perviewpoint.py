@@ -3,6 +3,8 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 import plotly.express as px
 from plotly.shapeannotation import annotation_params_for_line, annotation_params_for_rect
 
@@ -335,46 +337,85 @@ def tab_gsr(df):
 
 # Tab 3: Movement
 def tab_movement(df):
-    fig_gyrx = px.scatter(df,
-                y='ET_GyroX',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyrx = px.scatter(df,
+    #             y='ET_GyroX',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
-    fig_gyry = px.scatter(df,
-                y='ET_GyroY',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyry = px.scatter(df,
+    #             y='ET_GyroY',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
                 
 
-    fig_gyrz = px.scatter(df,
-                y='ET_GyroZ',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyrz = px.scatter(df,
+    #             y='ET_GyroZ',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
-    fig_accx = px.scatter(df,
-                y='ET_AccX',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_accx = px.scatter(df,
+    #             y='ET_AccX',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
-    fig_accy = px.scatter(df,
-                y='ET_AccY',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_accy = px.scatter(df,
+    #             y='ET_AccY',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
-    fig_accz = px.scatter(df,
-                y='ET_AccZ',
-                x='Relative timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_accz = px.scatter(df,
+    #             y='ET_AccZ',
+    #             x='Relative timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
+    
+    fig_gyr = make_subplots(rows=1, cols=3)
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        row=1, col=1
+    )
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        row=1, col=2
+    )
+
+    fig_gyr.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        row=1, col=3
+    )
+
+    fig_gyr.update_layout(width=1100, height=450, title_text="Gyroscope X/Y/Z")
+
+
+    fig_acc = make_subplots(rows=1, cols=3)
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        row=1, col=1
+    )
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        row=1, col=2
+    )
+
+    fig_acc.add_trace(
+        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        row=1, col=3
+    )
+
+    fig_acc.update_layout(width=1100, height=450, title_text="Acceleration X/Y/Z")
 
 
 
@@ -396,52 +437,24 @@ def tab_movement(df):
                     children=
                     [
                         dbc.Col(
-                            width=4,
+                            width=12,
                             children=
                             [
-                                dcc.Graph(figure=fig_gyrx)
+                                dcc.Graph(figure=fig_gyr)
                             ]
                         ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gyry)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_gyrz)
-                            ]
-                        )
                     ]
                 ),
                 dbc.Row(
                     children= 
                     [
                         dbc.Col(
-                            width=4,
+                            width=12,
                             children=
                             [
-                                dcc.Graph(figure=fig_accx)
+                                dcc.Graph(figure=fig_acc)
                             ]
                         ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_accy)
-                            ]
-                        ),
-                        dbc.Col(
-                            width=4,
-                            children=
-                            [
-                                dcc.Graph(figure=fig_accz)
-                            ]
-                        )
                     ]
                 ),
             ]
