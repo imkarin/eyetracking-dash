@@ -381,17 +381,17 @@ def tab_movement(df):
     fig_gyr = make_subplots(rows=1, cols=3)
 
     fig_gyr.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_GyroX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
         row=1, col=1
     )
 
     fig_gyr.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_GyroY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
         row=1, col=2
     )
 
     fig_gyr.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_GyroZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_GyroZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
         row=1, col=3
     )
 
@@ -401,17 +401,17 @@ def tab_movement(df):
     fig_acc = make_subplots(rows=1, cols=3)
 
     fig_acc.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_AccX'], mode='markers', name='Gaze X', marker=dict(size=0.2)),
         row=1, col=1
     )
 
     fig_acc.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_AccY'], mode='markers', name='Gaze Y', marker=dict(size=0.2)),
         row=1, col=2
     )
 
     fig_acc.add_trace(
-        go.Scatter(x=df['Timestamp (s)'], y=df['ET_AccZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
+        go.Scatter(x=df['Relative timestamp (s)'], y=df['ET_AccZ'], mode='markers', name='Gaze Z', marker=dict(size=0.2)),
         row=1, col=3
     )
 
