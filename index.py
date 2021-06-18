@@ -65,6 +65,26 @@ app.layout = html.Div(
 def render_page_content(pathname, data):
     # Apply the new filters (new DF)
     dff = df.copy()
+
+    # Respondent filters:
+    gender_filter = (dff['Resp gender'].isin(data['gender']))
+    age_filter = (dff['Resp age'].isin(data['age']))
+    timebegin = pd.to_datetime(data['time'][0], errors='coerce')
+    timeend = pd.to_datetime(data['time'][1], errors='coerce')
+    
+    if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
+        time_filter = True
+    else:
+        time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
+                    & (dff['Resp rec datetime'].dt.time <= timeend.time()))
+
+    dff = dff[gender_filter & age_filter & time_filter]
+
+    # If respondent filters don't match anything, don't update
+    if (len(dff) == 0):
+        raise PreventUpdate
+
+    # If 'data per viewpoint' is chosen, check which VP:
     if pathname == '/viewpoint-1':
         dff = dff[dff['Viewpoint_1 active on Tobii Glasses 2 Scene'] == 1]
 
@@ -100,12 +120,6 @@ def render_page_content(pathname, data):
         bgimg = base64.b64encode(open(image_filename, 'rb').read())
         width = 558 * 1.4
         height = 226 * 1.4
-
-    # Respondent filters:
-    name_filter = (dff['Resp name'].isin(data['respname']))
-
-    dff = dff[name_filter]
-        # gender_filter & age_filter & time_filter]
 
     print('Chosen respondents:')
     print(dff['Resp name'].unique())
