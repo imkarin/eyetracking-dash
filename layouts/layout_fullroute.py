@@ -325,24 +325,24 @@ def tab_gsr(df):
 
 # Tab 3: Movement
 def tab_movement(df):
-    fig_gyrx = px.scatter(df,
-                y='ET_GyroX',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyrx = px.scatter(df,
+    #             y='ET_GyroX',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
-    fig_gyry = px.scatter(df,
-                y='ET_GyroY',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyry = px.scatter(df,
+    #             y='ET_GyroY',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
                 
 
-    fig_gyrz = px.scatter(df,
-                y='ET_GyroZ',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_gyrz = px.scatter(df,
+    #             y='ET_GyroZ',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
     fig_gyr = make_subplots(rows=1, cols=3)
 
@@ -383,27 +383,25 @@ def tab_movement(df):
     fig_acc.update_layout(width=1100, height=450, title_text="Acceleration X/Y/Z")
 
 
-    fig_accx = px.scatter(df,
-                y='ET_AccX',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_accx = px.scatter(df,
+    #             y='ET_AccX',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
-    fig_accy = px.scatter(df,
-                y='ET_AccY',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
+    # fig_accy = px.scatter(df,
+    #             y='ET_AccY',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
-    fig_accz = px.scatter(df,
-                y='ET_AccZ',
-                x='Timestamp (s)',
-                color='Resp name',
-                opacity=0.3).update_traces(marker_size=2)
-
-
+    # fig_accz = px.scatter(df,
+    #             y='ET_AccZ',
+    #             x='Timestamp (s)',
+    #             color='Resp name',
+    #             opacity=0.3).update_traces(marker_size=2)
 
 
     tab_layout = [
