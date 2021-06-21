@@ -17,7 +17,7 @@ from layouts.layout_global import layout_global
 from layouts.layout_home import layout_home
 from layouts.layout_fullroute import layout_fullroute
 from layouts.layout_perviewpoint import layout_perviewpoint
-import layouts.layout_sources
+from layouts.layout_sources import layout_sources
 
 import base64
 
@@ -64,21 +64,21 @@ app.layout = html.Div(
                 Input('data-storage', 'data')])        # Store (contains filters)
 def render_page_content(pathname, data):
     # Apply the new filters (new DF)
-    dff = df.copy()
+    # dff = df.copy()
 
     # Respondent filters:
-    gender_filter = (dff['Resp gender'].isin(data['gender']))
-    age_filter = (dff['Resp age'].isin(data['age']))
+    gender_filter = (df['Resp gender'].isin(data['gender']))
+    age_filter = (df['Resp age'].isin(data['age']))
     timebegin = pd.to_datetime(data['time'][0], errors='coerce')
     timeend = pd.to_datetime(data['time'][1], errors='coerce')
     
     if(type(timebegin) != pd.Timestamp or type(timeend) != pd.Timestamp):    # Check if begin/endtime is timestamp
         time_filter = True
     else:
-        time_filter = ((dff['Resp rec datetime'].dt.time >= timebegin.time()) 
-                    & (dff['Resp rec datetime'].dt.time <= timeend.time()))
+        time_filter = ((df['Resp rec datetime'].dt.time >= timebegin.time()) 
+                    & (df['Resp rec datetime'].dt.time <= timeend.time()))
 
-    dff = dff[gender_filter & age_filter & time_filter]
+    dff = df[gender_filter & age_filter & time_filter]
 
     # If respondent filters don't match anything, don't update
     if (len(dff) == 0):
@@ -146,16 +146,16 @@ def render_page_content(pathname, data):
 
     # Page: Sources
     elif pathname == "/sources":
-        return html.P("This is the sources page."), 'Sources', ''
+        return layout_sources(), 'Sources', ''
 
     # Page: 404
-    return dbc.Jumbotron(
+    return [dbc.Jumbotron(
         [
             html.H1("404: Not found", className="text-danger"),
             html.Hr(),
             html.P(f"The pathname {pathname} was not recognised..."),
-        ], 'Error 404', ''
-    )
+        ]
+    )], 'Not found', ''
 
 # Run the server
 if __name__ == "__main__":
