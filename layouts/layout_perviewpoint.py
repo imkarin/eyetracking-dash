@@ -87,6 +87,7 @@ def tab_eyes(df, bgimg, width, height):
     fig_blink = px.histogram(df,
                         x='Blink detected (binary)',
                         color='Resp name',
+                        barmode='group',
                         title='Detected blinks',
                         nbins=2)
     
@@ -98,6 +99,19 @@ def tab_eyes(df, bgimg, width, height):
                             size='Fixation Duration',
                             opacity=.3,
                             title='Fixation coordinates, dispersion and duration')
+
+    fig_fixationxy.update_layout(
+                images= [dict(
+                    source='data:image/png;base64,{}'.format(bgimg.decode()),
+                    xref="paper", yref="paper",
+                    sizing='stretch',
+                    opacity=1,
+                    x=0, y=1,
+                    sizex=1, sizey=1,
+                    xanchor="left",
+                    yanchor="top",
+                    #sizing="stretch",
+                    layer="below")])
 
     # Saccade
     # ...
